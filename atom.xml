@@ -165,7 +165,7 @@ double fTemp = f_atmo(distance);
     <link href="https://fattymelon.github.io/2017/04/22/raytracing2/"/>
     <id>https://fattymelon.github.io/2017/04/22/raytracing2/</id>
     <published>2017-04-22T06:26:55.000Z</published>
-    <updated>2017-05-25T12:34:24.000Z</updated>
+    <updated>2017-05-25T13:36:13.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文主要说一下自己的理解，<br>关于smallpt的cx,cy是怎么来的，是用来做什么的？</p>
 <a id="more"></a>
@@ -178,7 +178,7 @@ double fTemp = f_atmo(distance);
 <p>所以(sx + .5 + dx) / 2这个的值得范围是[-0.25, 0.75]。这个值主要是为了在随机采样时，对x进行偏移。我们如果把他忽略不计。<br>那么(((sx + .5 + dx) / 2 + x) / w - .5)的值其实是在[-0.5, 0.5]的。<br>当x = w-1, y = 0时，<br>(0.5 <em> cx)+(-0.5 </em> cy)+cam.d是为了计算最大角度的射出光线。</p>
 <p>图例1， 如果我们的cx = (w / h)<br><img src="http://img.blog.csdn.net/20170408200023623?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p>图例2， 如果我们的cx = (w/h *0.5135)，我们的最大角度肯定比图例1小。<br><img src="http://img.blog.csdn.net/20170408200032935?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>###3. 验证结果<br>我的理解是：<br>0.5135这个参数就是为了设置视角大小的。<br>作者计算好了角度之后，才这样设置的。</p>
+<h3 id="3-验证结果"><a href="#3-验证结果" class="headerlink" title="3. 验证结果"></a>3. 验证结果</h3><p>我的理解是：<br>0.5135这个参数就是为了设置视角大小的。<br>作者计算好了角度之后，才这样设置的。</p>
 <p>例子1</p>
 <pre><code class="c">double testVal = 1.0;
 double cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;
@@ -212,7 +212,7 @@ double cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;
     <link href="https://fattymelon.github.io/2017/04/20/raytracing1/"/>
     <id>https://fattymelon.github.io/2017/04/20/raytracing1/</id>
     <published>2017-04-20T06:26:55.000Z</published>
-    <updated>2017-05-25T12:33:56.000Z</updated>
+    <updated>2017-05-25T13:36:03.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文主要是为了记录我学习smallpt的过程。第一部分是关于整个程序的大致分解。第二部分主要说一下我对main函数中cx和cy的理解。第三部分主要说明光线跟踪的每一行代码所用到的数学知识。</p>
 <a id="more"></a>
@@ -351,7 +351,7 @@ fprintf(f, &quot;P3\n%d %d\n%d\n&quot;, w, h, 255);
 for (int i = 0; i&lt;w*h; i++)
     fprintf(f, &quot;%d %d %d &quot;, toInt(c[i].x), toInt(c[i].y), toInt(c[i].z));
 </code></pre>
-<h3 id="2-4光线跟踪递归函数"><a href="#2-4光线跟踪递归函数" class="headerlink" title="2.4光线跟踪递归函数"></a>2.4光线跟踪递归函数</h3><p>radiance函数在第二部分介绍。<br>以下是大致的分块。</p>
+<h3 id="2-4-光线跟踪递归函数"><a href="#2-4-光线跟踪递归函数" class="headerlink" title="2.4 光线跟踪递归函数"></a>2.4 光线跟踪递归函数</h3><p>radiance函数在第二部分介绍。<br>以下是大致的分块。</p>
 <p>1)判断是否相交，求交点，求表面法向</p>
 <pre><code class="c">Vec radiance(const Ray &amp;r, int depth, unsigned short *Xi) {
     double t;                               // distance to intersection 

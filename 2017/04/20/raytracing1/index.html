@@ -22,7 +22,7 @@
 <meta property="og:description" content="本文主要是为了记录我学习smallpt的过程。第一部分是关于整个程序的大致分解。第二部分主要说一下我对main函数中cx和cy的理解。第三部分主要说明光线跟踪的每一行代码所用到的数学知识。">
 <meta property="og:image" content="http://img.blog.csdn.net/20170408164053927?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20170408170258582?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-05-25T12:33:56.000Z">
+<meta property="og:updated_time" content="2017-05-25T13:36:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="smallpt详解(一)">
 <meta name="twitter:description" content="本文主要是为了记录我学习smallpt的过程。第一部分是关于整个程序的大致分解。第二部分主要说一下我对main函数中cx和cy的理解。第三部分主要说明光线跟踪的每一行代码所用到的数学知识。">
@@ -43,8 +43,10 @@
     
     
     
-    <!--prettify代码高亮主题css引入-->
-    <link href="/plugins/prettify/prettify.css" rel="stylesheet">
+    
+        <!--prettify代码高亮主题css引入-->
+        <link href="/plugins/prettify/prettify.css" rel="stylesheet">
+    
 </head>
 
     <body>
@@ -362,7 +364,7 @@ fprintf(f, &quot;P3\n%d %d\n%d\n&quot;, w, h, 255);
 for (int i = 0; i&lt;w*h; i++)
     fprintf(f, &quot;%d %d %d &quot;, toInt(c[i].x), toInt(c[i].y), toInt(c[i].z));
 </code></pre>
-<h3 id="2-4光线跟踪递归函数"><a href="#2-4光线跟踪递归函数" class="headerlink" title="2.4光线跟踪递归函数"></a>2.4光线跟踪递归函数</h3><p>radiance函数在第二部分介绍。<br>以下是大致的分块。</p>
+<h3 id="2-4-光线跟踪递归函数"><a href="#2-4-光线跟踪递归函数" class="headerlink" title="2.4 光线跟踪递归函数"></a>2.4 光线跟踪递归函数</h3><p>radiance函数在第二部分介绍。<br>以下是大致的分块。</p>
 <p>1)判断是否相交，求交点，求表面法向</p>
 <pre><code class="c">Vec radiance(const Ray &amp;r, int depth, unsigned short *Xi) {
     double t;                               // distance to intersection 

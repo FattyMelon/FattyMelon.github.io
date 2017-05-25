@@ -28,7 +28,7 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20170408202111900?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20170408202302541?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20170408202608815?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-05-25T12:34:24.000Z">
+<meta property="og:updated_time" content="2017-05-25T13:36:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="smallpt详解(二)">
 <meta name="twitter:description" content="本文主要说一下自己的理解，关于smallpt的cx,cy是怎么来的，是用来做什么的？">
@@ -49,8 +49,10 @@
     
     
     
-    <!--prettify代码高亮主题css引入-->
-    <link href="/plugins/prettify/prettify.css" rel="stylesheet">
+    
+        <!--prettify代码高亮主题css引入-->
+        <link href="/plugins/prettify/prettify.css" rel="stylesheet">
+    
 </head>
 
     <body>
@@ -242,7 +244,7 @@
 <p>所以(sx + .5 + dx) / 2这个的值得范围是[-0.25, 0.75]。这个值主要是为了在随机采样时，对x进行偏移。我们如果把他忽略不计。<br>那么(((sx + .5 + dx) / 2 + x) / w - .5)的值其实是在[-0.5, 0.5]的。<br>当x = w-1, y = 0时，<br>(0.5 <em> cx)+(-0.5 </em> cy)+cam.d是为了计算最大角度的射出光线。</p>
 <p>图例1， 如果我们的cx = (w / h)<br><img src="http://img.blog.csdn.net/20170408200023623?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p>图例2， 如果我们的cx = (w/h *0.5135)，我们的最大角度肯定比图例1小。<br><img src="http://img.blog.csdn.net/20170408200032935?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>###3. 验证结果<br>我的理解是：<br>0.5135这个参数就是为了设置视角大小的。<br>作者计算好了角度之后，才这样设置的。</p>
+<h3 id="3-验证结果"><a href="#3-验证结果" class="headerlink" title="3. 验证结果"></a>3. 验证结果</h3><p>我的理解是：<br>0.5135这个参数就是为了设置视角大小的。<br>作者计算好了角度之后，才这样设置的。</p>
 <p>例子1</p>
 <pre><code class="c">double testVal = 1.0;
 double cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;

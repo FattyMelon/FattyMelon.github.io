@@ -3,6 +3,9 @@
   background: #2d2d2d;
   font-family: Menlo, "Bitstream Vera Sans Mono", "DejaVu Sans Mono", Monaco, Consolas, monospace;
   border: 0 !important;
+  box-shadow: 5px 5px 3px #888888;
+  border-radius:5px;
+  padding: 1em;
 }
 
 .pln {
@@ -11,8 +14,18 @@
 
 /* Specify class=linenums on a pre to get line numbering */
 ol.linenums {
-  margin: 15px 5px 15px 15px;
+  margin-left: 5px;
   color: #999999;
+}
+ol.srollbar {
+  scrollbar-face-color: #000000; 
+  scrollbar-highlight-color: #000000; 
+  scrollbar-shadow-color: #000000; 
+  scrollbar-3dlight-color: #000000; 
+  scrollbar-arrow-color: #000000; 
+  scrollbar-track-color: #000000; 
+  scrollbar-darkshadow-color: #000000; 
+  scrollbar-base-color: #000000
 }
 
 li.L0,
