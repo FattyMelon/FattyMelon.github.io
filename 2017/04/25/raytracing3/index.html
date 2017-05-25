@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
     
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,7 +23,7 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20170408210135631?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20170408210727109?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20170408210736953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-05-25T06:57:59.000Z">
+<meta property="og:updated_time" content="2017-05-25T12:30:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="smallpt详解(三)">
 <meta name="twitter:description" content="本文主要对smallpt的光线跟踪函数进行详细的解释">
@@ -42,6 +43,9 @@
     <!--STYLES END-->
     
     
+    
+    <!--prettify代码高亮主题css引入-->
+    <link href="/plugins/prettify/prettify.css" rel="stylesheet">
 </head>
 
     <body>
@@ -224,11 +228,78 @@
         <div class="main-content-wrap">
             <p>本文主要对smallpt的光线跟踪函数进行详细的解释<br><a id="more"></a></p>
 <h2 id="1-光线跟踪详细解释"><a href="#1-光线跟踪详细解释" class="headerlink" title="1. 光线跟踪详细解释"></a>1. 光线跟踪详细解释</h2><p>计算法向量，计算折射光线，反射光线等，可以查阅《3D数学基础，图形与游戏开发》</p>
-<h3 id="1-1-计算部分"><a href="#1-1-计算部分" class="headerlink" title="1.1 计算部分"></a>1.1 计算部分</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function">Vec <span class="title">radiance</span><span class="params">(<span class="keyword">const</span> Ray &amp;r, <span class="keyword">int</span> depth, <span class="keyword">unsigned</span> <span class="keyword">short</span> *Xi)</span> </span>&#123;</div><div class="line">    <span class="keyword">double</span> t;                               <span class="comment">// 与射线相交物体的距离</span></div><div class="line">    <span class="keyword">int</span> id = <span class="number">0</span>;                               <span class="comment">// 与射线相交物体的id</span></div><div class="line">    <span class="keyword">if</span> (!intersect(r, t, id)) </div><div class="line">        <span class="keyword">return</span> Vec(); <span class="comment">// 如果都没有相交，则返回emisson(0, 0, 0)</span></div><div class="line">    <span class="keyword">const</span> Sphere &amp;obj = spheres[id];        <span class="comment">// the hit object </span></div><div class="line">    Vec x = r.o + r.d*t, n = (x - obj.position).norm(); <span class="comment">// 计算n,球面法向量</span></div><div class="line">    Vec nl = n.dot(r.d) &lt; <span class="number">0</span> ? n : n*<span class="number">-1</span>, f = obj.color;</div><div class="line">    <span class="keyword">double</span> p = f.x&gt;f.y &amp;&amp; f.x&gt;f.z ? f.x : f.y&gt;f.z ? f.y : f.z; <span class="comment">// 找出最大的值</span></div><div class="line">    <span class="keyword">if</span> (++depth&gt;<span class="number">5</span>||!p) </div><div class="line">        <span class="keyword">if</span> (erand48(Xi)&lt;p) </div><div class="line">            f = f*(<span class="number">1</span> / p); <span class="comment">//假设f为(0.5, 0.2, 0.2)，那么作者假定这个表面的反射率为f*(1/0.5)，也就是颜色值最大的反射率最高(1, 0.4, 0.4)</span></div><div class="line">        <span class="keyword">else</span>  </div><div class="line">            <span class="keyword">return</span> obj.emission;</div></pre></td></tr></table></figure>
-<h3 id="1-2-漫反射"><a href="#1-2-漫反射" class="headerlink" title="1.2 漫反射"></a>1.2 漫反射</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (obj.refl == DIFF) &#123;                  <span class="comment">// 如果物体的反射属性是漫反射 </span></div><div class="line">    <span class="keyword">double</span> r1 = <span class="number">2</span> * M_PI*erand48(Xi), r2 = erand48(Xi), r2s = <span class="built_in">sqrt</span>(r2); <span class="comment">//取随机数</span></div><div class="line">    Vec w = nl, u = ((<span class="built_in">fabs</span>(w.x)&gt;<span class="number">.1</span> ? Vec(<span class="number">0</span>, <span class="number">1</span>) : Vec(<span class="number">1</span>)).cross(w)).norm(), v = w.cross(u);  <span class="comment">//w，v，u为正交基</span></div><div class="line">    Vec d = (u*<span class="built_in">cos</span>(r1)*r2s + v*<span class="built_in">sin</span>(r1)*r2s + w*<span class="built_in">sqrt</span>(<span class="number">1</span> - r2)).norm(); <span class="comment">//求得一个随机的漫反射光线，继续迭代</span></div><div class="line">    <span class="keyword">return</span> obj.emission + f.mult(radiance(Ray(x, d), depth, Xi));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="1-3-镜面反射光"><a href="#1-3-镜面反射光" class="headerlink" title="1.3 镜面反射光"></a>1.3 镜面反射光</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (obj.refl == SPEC)            <span class="comment">// 如果物体的反射属性是漫反射 </span></div><div class="line">        <span class="keyword">return</span> obj.emission + f.mult(radiance(Ray(x, r.d - n * <span class="number">2</span> * n.dot(r.d)), depth, Xi)); <span class="comment">//这个比较简单，只要求得反射光的角度即可</span></div></pre></td></tr></table></figure>
-<h3 id="1-4-折射加反射"><a href="#1-4-折射加反射" class="headerlink" title="1.4 折射加反射"></a>1.4 折射加反射</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Ray reflRay(x, r.d - n * 2 * n.dot(r.d));     // 由平行四边形的方法求得反射光的direction</div><div class="line">    bool into = n.dot(nl)&gt;0;                // 判断光线是否是进入球体</div><div class="line">    double nc = 1, nt = 1.5, nnt = into ? nc / nt : nt / nc, ddn = r.d.dot(nl), cos2t;</div><div class="line">    if ((cos2t = 1 - nnt*nnt*(1 - ddn*ddn))&lt;0)    // 如果求得cos2t&lt;0，就没必要进行折射了。</div><div class="line">        return obj.emission + f.mult(radiance(reflRay, depth, Xi));</div><div class="line">    Vec tdir = (r.d*nnt - n*((into ? 1 : -1)*(ddn*nnt + sqrt(cos2t)))).norm(); //折射角的角度</div><div class="line">    double a = nt - nc, b = nt + nc, R0 = a*a / (b*b), c = 1 - (into ? -ddn : tdir.dot(n));</div><div class="line">    double Re = R0 + (1 - R0)*c*c*c*c*c, Tr = 1 - Re, P = .25 + .5*Re, RP = Re / P, TP = Tr / (1 - P);</div><div class="line">    return obj.emission + f.mult(depth&gt;2 ? (erand48(Xi)&lt;P ?   // 轮盘赌</div><div class="line">        radiance(reflRay, depth, Xi)*RP : radiance(Ray(x, tdir), depth, Xi)*TP) :</div><div class="line">        radiance(reflRay, depth, Xi)*Re + radiance(Ray(x, tdir), depth, Xi)*Tr);</div></pre></td></tr></table></figure>
-<h2 id="2-加烟雾效果"><a href="#2-加烟雾效果" class="headerlink" title="2 加烟雾效果"></a>2 加烟雾效果</h2><p>学习完smallpt之后，看到图形学的书上提到了烟雾效果。<br><img src="http://img.blog.csdn.net/20170408210135631?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>编程实现<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> E_MATH       2.71828</span></div><div class="line"><span class="function">Vector <span class="title">frog_color</span><span class="params">(<span class="number">0.7</span>, <span class="number">0.7</span>, <span class="number">0.7</span>)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">f_atmo</span><span class="params">(<span class="keyword">double</span> distance)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">pow</span>(E_MATH, -(<span class="number">0.01</span> * <span class="number">0.01</span>* distance * distance));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 然后修改光线反射，折射中的代码</span></div><div class="line"><span class="comment">// 在这个实现中，我只在第一层的递归加了烟雾效果</span></div><div class="line"><span class="comment">// 修改漫反射的代码</span></div><div class="line">        <span class="keyword">if</span> (depth &lt;= <span class="number">1</span>) &#123;</div><div class="line">            <span class="keyword">double</span> fTemp = f_atmo(distance);</div><div class="line">            <span class="keyword">return</span> obj._emission + (radiance(Ray(hit_point, direct), depth)) * fTemp + frog_color*(<span class="number">1</span> - fTemp);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> </div><div class="line">            <span class="keyword">return</span> obj._emission + f.mult(radiance(Ray(hit_point, direct), depth));</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// 修改反射</span></div><div class="line"><span class="keyword">if</span> (depth &lt;= <span class="number">1</span>) &#123;</div><div class="line">            <span class="keyword">double</span> fTemp = f_atmo(distance);</div><div class="line">            <span class="keyword">return</span> obj._emission + (radiance(Ray(hit_point, direct_refl), depth)) * fTemp + frog_color*(<span class="number">1</span> - fTemp);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">            <span class="keyword">return</span> obj._emission + radiance(Ray(hit_point, direct_refl), depth);</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// 修改折射</span></div><div class="line">        <span class="keyword">double</span> fTemp = f_atmo(distance);</div><div class="line">            <span class="keyword">return</span> ((radiance(ray_refl, depth) * Fe</div><div class="line">                + radiance(ray_refr, depth) * Fr))*fTemp + frog_color*(<span class="number">1</span> - fTemp);</div></pre></td></tr></table></figure></p>
+<h3 id="1-1-计算部分"><a href="#1-1-计算部分" class="headerlink" title="1.1 计算部分"></a>1.1 计算部分</h3><pre><code class="c">Vec radiance(const Ray &amp;r, int depth, unsigned short *Xi) {
+    double t;                               // 与射线相交物体的距离
+    int id = 0;                               // 与射线相交物体的id
+    if (!intersect(r, t, id)) 
+        return Vec(); // 如果都没有相交，则返回emisson(0, 0, 0)
+    const Sphere &amp;obj = spheres[id];        // the hit object 
+    Vec x = r.o + r.d*t, n = (x - obj.position).norm(); // 计算n,球面法向量
+    Vec nl = n.dot(r.d) &lt; 0 ? n : n*-1, f = obj.color;
+    double p = f.x&gt;f.y &amp;&amp; f.x&gt;f.z ? f.x : f.y&gt;f.z ? f.y : f.z; // 找出最大的值
+    if (++depth&gt;5||!p) 
+        if (erand48(Xi)&lt;p) 
+            f = f*(1 / p); //假设f为(0.5, 0.2, 0.2)，那么作者假定这个表面的反射率为f*(1/0.5)，也就是颜色值最大的反射率最高(1, 0.4, 0.4)
+        else  
+            return obj.emission; 
+    // ...
+}
+</code></pre>
+<h3 id="1-2-漫反射"><a href="#1-2-漫反射" class="headerlink" title="1.2 漫反射"></a>1.2 漫反射</h3><pre><code class="c">if (obj.refl == DIFF) {                  // 如果物体的反射属性是漫反射 
+    double r1 = 2 * M_PI*erand48(Xi), r2 = erand48(Xi), r2s = sqrt(r2); //取随机数
+    Vec w = nl, u = ((fabs(w.x)&gt;.1 ? Vec(0, 1) : Vec(1)).cross(w)).norm(), v = w.cross(u);  //w，v，u为正交基
+    Vec d = (u*cos(r1)*r2s + v*sin(r1)*r2s + w*sqrt(1 - r2)).norm(); //求得一个随机的漫反射光线，继续迭代
+    return obj.emission + f.mult(radiance(Ray(x, d), depth, Xi));
+}
+</code></pre>
+<h3 id="1-3-镜面反射光"><a href="#1-3-镜面反射光" class="headerlink" title="1.3 镜面反射光"></a>1.3 镜面反射光</h3><pre><code class="c++">else if (obj.refl == SPEC)            // 如果物体的反射属性是漫反射 
+    return obj.emission + f.mult(radiance(Ray(x, r.d - n * 2 * n.dot(r.d)), depth, Xi)); //这个比较简单，只要求得反射光的角度即可
+</code></pre>
+<h3 id="1-4-折射加反射"><a href="#1-4-折射加反射" class="headerlink" title="1.4 折射加反射"></a>1.4 折射加反射</h3><pre><code class="c++">else {
+    Ray reflRay(x, r.d - n * 2 * n.dot(r.d));     // 由平行四边形的方法求得反射光的direction
+    bool into = n.dot(nl)&gt;0;                // 判断光线是否是进入球体
+    double nc = 1, nt = 1.5, nnt = into ? nc / nt : nt / nc, ddn = r.d.dot(nl), cos2t;
+    if ((cos2t = 1 - nnt*nnt*(1 - ddn*ddn))&lt;0)    // 如果求得cos2t&lt;0，就没必要进行折射了。
+        return obj.emission + f.mult(radiance(reflRay, depth, Xi));
+    Vec tdir = (r.d*nnt - n*((into ? 1 : -1)*(ddn*nnt + sqrt(cos2t)))).norm(); //折射角的角度
+    double a = nt - nc, b = nt + nc, R0 = a*a / (b*b), c = 1 - (into ? -ddn : tdir.dot(n));
+    double Re = R0 + (1 - R0)*c*c*c*c*c, Tr = 1 - Re, P = .25 + .5*Re, RP = Re / P, TP = Tr / (1 - P);
+    return obj.emission + f.mult(depth&gt;2 ? (erand48(Xi)&lt;P ?   // 轮盘赌
+        radiance(reflRay, depth, Xi)*RP : radiance(Ray(x, tdir), depth, Xi)*TP) :
+        radiance(reflRay, depth, Xi)*Re + radiance(Ray(x, tdir), depth, Xi)*Tr);
+}
+</code></pre>
+<h2 id="2-加烟雾效果"><a href="#2-加烟雾效果" class="headerlink" title="2 加烟雾效果"></a>2 加烟雾效果</h2><p>学习完smallpt之后，看到图形学的书上提到了烟雾效果。<br><img src="http://img.blog.csdn.net/20170408210135631?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>编程实现</p>
+<pre><code class="c">#define E_MATH       2.71828
+Vector frog_color(0.7, 0.7, 0.7);
+
+inline double f_atmo(double distance) {
+    return pow(E_MATH, -(0.01 * 0.01* distance * distance));
+}
+</code></pre>
+<pre><code class="c">// 然后修改光线反射，折射中的代码
+// 在这个实现中，我只在第一层的递归加了烟雾效果
+// 修改漫反射的代码
+if (depth &lt;= 1) {
+    double fTemp = f_atmo(distance);
+    return obj._emission + (radiance(Ray(hit_point, direct), depth)) * fTemp + frog_color*(1 - fTemp);
+}
+else 
+    return obj._emission + f.mult(radiance(Ray(hit_point, direct), depth));
+
+// 修改反射
+if (depth &lt;= 1) {
+    double fTemp = f_atmo(distance);
+        return obj._emission + (radiance(Ray(hit_point, direct_refl), depth)) * fTemp + frog_color*(1 - fTemp);
+    }
+else
+    return obj._emission + radiance(Ray(hit_point, direct_refl), depth);
+
+// 修改折射
+double fTemp = f_atmo(distance);
+    return ((radiance(ray_refl, depth) * Fe
+                + radiance(ray_refr, depth) * Fr))*fTemp + frog_color*(1 - fTemp);
+</code></pre>
 <p>效果图1，无烟雾</p>
 <p><img src="http://img.blog.csdn.net/20170408210727109?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p>效果图2，加烟雾，可以看出后面那个大球的轮廓。感觉像现在中国最流行的雾霾。 :D<br><img src="http://img.blog.csdn.net/20170408210736953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
@@ -341,8 +412,18 @@ gitment.render('container')
 
     <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
 	</script>
-</footer>
 
+	
+	<!--prettify代码高亮脚本引入-->
+	<script src="/plugins/prettify/prettify.js"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+			prettyPrint();
+		};
+	</script>
+	
+</footer>
             </div>
             
                 <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">

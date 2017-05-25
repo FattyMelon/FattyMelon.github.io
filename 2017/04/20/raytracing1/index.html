@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
     
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +22,7 @@
 <meta property="og:description" content="本文主要是为了记录我学习smallpt的过程。第一部分是关于整个程序的大致分解。第二部分主要说一下我对main函数中cx和cy的理解。第三部分主要说明光线跟踪的每一行代码所用到的数学知识。">
 <meta property="og:image" content="http://img.blog.csdn.net/20170408164053927?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20170408170258582?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-05-25T06:55:42.000Z">
+<meta property="og:updated_time" content="2017-05-25T11:54:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="smallpt详解(一)">
 <meta name="twitter:description" content="本文主要是为了记录我学习smallpt的过程。第一部分是关于整个程序的大致分解。第二部分主要说一下我对main函数中cx和cy的理解。第三部分主要说明光线跟踪的每一行代码所用到的数学知识。">
@@ -41,6 +42,9 @@
     <!--STYLES END-->
     
     
+    
+    <!--prettify代码高亮主题css引入-->
+    <link href="/plugins/prettify/prettify.css" rel="stylesheet">
 </head>
 
     <body>
@@ -222,33 +226,187 @@
     <div class="post-content markdown" itemprop="articleBody">
         <div class="main-content-wrap">
             <p>本文主要是为了记录我学习smallpt的过程。第一部分是关于整个程序的大致分解。第二部分主要说一下我对main函数中cx和cy的理解。第三部分主要说明光线跟踪的每一行代码所用到的数学知识。<br><a id="more"></a></p>
-<h2 id="1-基本功能函数"><a href="#1-基本功能函数" class="headerlink" title="1. 基本功能函数"></a>1. 基本功能函数</h2><h3 id="1-1-随机函数"><a href="#1-1-随机函数" class="headerlink" title="1.1 随机函数"></a>1.1 随机函数</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> M_PI 3.1415</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">double</span> <span class="title">erand48</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">short</span> xsubi[<span class="number">3</span>])</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> (<span class="keyword">double</span>)rand() / (<span class="keyword">double</span>)RAND_MAX;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="1-基本功能函数"><a href="#1-基本功能函数" class="headerlink" title="1. 基本功能函数"></a>1. 基本功能函数</h2><h3 id="1-1-随机函数"><a href="#1-1-随机函数" class="headerlink" title="1.1 随机函数"></a>1.1 随机函数</h3><pre><code class="c">#include &lt;math.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+#define M_PI 3.1415
+
+double erand48(unsigned short xsubi[3]) {
+    return (double)rand() / (double)RAND_MAX;
+}
+</code></pre>
 <p>erand48()函数是linux下的随机函数，可以取[0, 1]的随机浮点数，在windows下必须自己写一个类似功能的函数。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">double</span> <span class="title">clamp</span><span class="params">(<span class="keyword">double</span> x)</span> </span>&#123; <span class="keyword">return</span> x &lt; <span class="number">0</span> ? <span class="number">0</span> : x &gt; <span class="number">1</span> ? <span class="number">1</span> : x; &#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">toInt</span><span class="params">(<span class="keyword">double</span> x)</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">int</span>(<span class="built_in">pow</span>(clamp(x), <span class="number">1</span> / <span class="number">2.2</span>) * <span class="number">255</span> + <span class="number">.5</span>); &#125;    <span class="comment">//四舍五入</span></div></pre></td></tr></table></figure>
+<pre><code class="c">inline double clamp(double x) { return x &lt; 0 ? 0 : x &gt; 1 ? 1 : x; }
+
+inline int toInt(double x) { return int(pow(clamp(x), 1 / 2.2) * 255 + .5); }    //四舍五入
+</code></pre>
 <p>这里的难点在于为什么要用pow(clamp(x), 1/ 2.2)，查了资料才知道是gamma校正方法，详情可以看<br><a href="http://blog.csdn.net/candycat1992/article/details/46228771" target="_blank" rel="external">http://blog.csdn.net/candycat1992/article/details/46228771</a></p>
-<h3 id="1-2-Vec类"><a href="#1-2-Vec类" class="headerlink" title="1.2 Vec类"></a>1.2 Vec类</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Vec</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">double</span> x, y, z;</div><div class="line">    Vec(<span class="keyword">double</span> x_ = <span class="number">0</span>, <span class="keyword">double</span> y_ = <span class="number">0</span>, <span class="keyword">double</span> z_ = <span class="number">0</span>) : x(x_), y(y_), z(z_) &#123;&#125;</div><div class="line">    Vec <span class="keyword">operator</span>+(<span class="keyword">const</span> Vec&amp; rhs) <span class="keyword">const</span> &#123;</div><div class="line">        <span class="keyword">return</span> Vec(x + rhs.x, y + rhs.y, z + rhs.z);</div><div class="line">    &#125;</div><div class="line">    Vec <span class="keyword">operator</span>-(<span class="keyword">const</span> Vec&amp; rhs) <span class="keyword">const</span> &#123;</div><div class="line">        <span class="keyword">return</span> Vec(x - rhs.x, y - rhs.y, z - rhs.z);</div><div class="line">    &#125;</div><div class="line">    Vec <span class="keyword">operator</span>*(<span class="keyword">double</span> b) <span class="keyword">const</span> &#123;</div><div class="line">        <span class="keyword">return</span> Vec(x * b, y * b, z * b);</div><div class="line">    &#125;</div><div class="line">    <span class="function">Vec <span class="title">mult</span><span class="params">(<span class="keyword">const</span> Vec &amp;rhs)</span> <span class="keyword">const</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> Vec(x * rhs.x, y * rhs.y, z * rhs.z);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">double</span> <span class="title">dot</span><span class="params">(<span class="keyword">const</span> Vec &amp;rhs)</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> x*rhs.x + y*rhs.y + z*rhs.z; &#125;</div><div class="line">    <span class="function">Vec <span class="title">cross</span><span class="params">(<span class="keyword">const</span> Vec &amp;rhs)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> Vec(y * rhs.z - z * rhs.y,</div><div class="line">            z * rhs.x - x * rhs.z,</div><div class="line">            x * rhs.y - y * rhs.x);</div><div class="line">    &#125;</div><div class="line">    <span class="function">Vec&amp; <span class="title">norm</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> *<span class="keyword">this</span> = *<span class="keyword">this</span> * (<span class="number">1</span> / <span class="built_in">sqrt</span>(x*x + y*y + z*z)); &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="1-2-Vec类"><a href="#1-2-Vec类" class="headerlink" title="1.2 Vec类"></a>1.2 Vec类</h3><pre><code class="c">struct Vec
+{
+    double x, y, z;
+    Vec(double x_ = 0, double y_ = 0, double z_ = 0) : x(x_), y(y_), z(z_) {}
+    Vec operator+(const Vec&amp; rhs) const {
+        return Vec(x + rhs.x, y + rhs.y, z + rhs.z);
+    }
+    Vec operator-(const Vec&amp; rhs) const {
+        return Vec(x - rhs.x, y - rhs.y, z - rhs.z);
+    }
+    Vec operator*(double b) const {
+        return Vec(x * b, y * b, z * b);
+    }
+    Vec mult(const Vec &amp;rhs) const {
+        return Vec(x * rhs.x, y * rhs.y, z * rhs.z);
+    }
+    double dot(const Vec &amp;rhs) const { return x*rhs.x + y*rhs.y + z*rhs.z; }
+    Vec cross(const Vec &amp;rhs) {
+        return Vec(y * rhs.z - z * rhs.y,
+            z * rhs.x - x * rhs.z,
+            x * rhs.y - y * rhs.x);
+    }
+    Vec&amp; norm() { return *this = *this * (1 / sqrt(x*x + y*y + z*z)); }
+}
+</code></pre>
 <p>1) 其中包括向量加减，数乘，标准化，点乘，叉乘，还有需要注意的mult函数，后来会提到。<br>2) 这个Vec类在之后的计算中既可以表达向量Vector，亦可以表达三维点Point，也用来保存颜色RGB的值。</p>
-<h3 id="1-3-Ray类"><a href="#1-3-Ray类" class="headerlink" title="1.3 Ray类"></a>1.3 Ray类</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Ray</span> </span></div><div class="line">&#123;</div><div class="line">    Vec o, d;    <span class="comment">// o is original point, d is direction of lighting</span></div><div class="line">    Ray(Vec o_, Vec d_) : o(o_), d(d_) &#123;&#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="1-3-Ray类"><a href="#1-3-Ray类" class="headerlink" title="1.3 Ray类"></a>1.3 Ray类</h3><pre><code class="c">struct Ray 
+{
+    Vec o, d;    // o is original point, d is direction of lighting
+    Ray(Vec o_, Vec d_) : o(o_), d(d_) {}
+};
+</code></pre>
 <p>射线方程，o是射线的起点，d代表方向</p>
-<h3 id="1-4-Sphere类"><a href="#1-4-Sphere类" class="headerlink" title="1.4 Sphere类"></a>1.4 Sphere类</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">enum</span> Refl_t &#123; DIFF, SPEC, REFR&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Sphere</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">double</span> rad;    <span class="comment">// radius</span></div><div class="line">    Vec position, emission, color;</div><div class="line">    Refl_t refl;</div><div class="line">    </div><div class="line">    Sphere(<span class="keyword">double</span> rad_, Vec p_, Vec e_, Vec c_, Refl_t refl_) :</div><div class="line">        rad(rad_), position(p_), emission(e_), color(c_), refl(refl_) &#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">double</span> <span class="title">intersect</span><span class="params">(<span class="keyword">const</span> Ray &amp;r)</span> <span class="keyword">const</span> </span>&#123;    <span class="comment">// return distance, 0 if nohit</span></div><div class="line">        Vec op = position - r.o;</div><div class="line">        <span class="keyword">double</span> t, eps = <span class="number">1e-4</span>;</div><div class="line">        <span class="keyword">double</span> b = op.dot(r.d), det = b*b + rad*rad - op.dot(op);</div><div class="line">        <span class="keyword">if</span> (det &lt; <span class="number">0</span>)    </div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="keyword">else</span>    </div><div class="line">            det = <span class="built_in">sqrt</span>(det);</div><div class="line">        <span class="keyword">return</span> (t = b - det) &gt; eps ? t : ((t = b + det) &gt; eps ? t : <span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="1-4-Sphere类"><a href="#1-4-Sphere类" class="headerlink" title="1.4 Sphere类"></a>1.4 Sphere类</h3><pre><code class="c">enum Refl_t { DIFF, SPEC, REFR};
+
+struct Sphere
+{
+    double rad;    // radius
+    Vec position, emission, color;
+    Refl_t refl;
+
+    Sphere(double rad_, Vec p_, Vec e_, Vec c_, Refl_t refl_) :
+        rad(rad_), position(p_), emission(e_), color(c_), refl(refl_) {}
+    double intersect(const Ray &amp;r) const {    // return distance, 0 if nohit
+        Vec op = position - r.o;
+        double t, eps = 1e-4;
+        double b = op.dot(r.d), det = b*b + rad*rad - op.dot(op);
+        if (det &lt; 0)    
+            return 0;
+        else    
+            det = sqrt(det);
+        return (t = b - det) &gt; eps ? t : ((t = b + det) &gt; eps ? t : 0);
+    }
+};
+</code></pre>
 <p>射线和球体/圆，求交原理图：</p>
 <p><img src="http://img.blog.csdn.net/20170408164053927?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>求交的基本原理就是将射线的参数方程代入到圆的函数中，求t的值。<br>1）将P(t) = O + tD 代入圆方程，会得到 t 的一元二次方程。<br>2）先求出Vec op，op是用球心p的坐标减去射线的起点，表示原理图中的(O - C)。<br>3）b = op.dot(r.d)指代 “ D * (O - C) “<br>4）求det，这里要注意我们求的b和原理图中的b差了两倍，所以可以直接用<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">double</span> det = b * b - op.dot(op) + rad * rad;</div></pre></td></tr></table></figure></p>
+<p>求交的基本原理就是将射线的参数方程代入到圆的函数中，求t的值。<br>1）将P(t) = O + tD 代入圆方程，会得到 t 的一元二次方程。<br>2）先求出Vec op，op是用球心p的坐标减去射线的起点，表示原理图中的(O - C)。<br>3）b = op.dot(r.d)指代 “ D * (O - C) “<br>4）求det，这里要注意我们求的b和原理图中的b差了两倍，所以可以直接用</p>
+<pre><code class="c">double det = b * b - op.dot(op) + rad * rad;
+</code></pre>
 <p>如果det&lt;0说明无解，直接return 0。<br>否则求根号的det<br>5）最终的解有一个或两个，可能在 t = b - det，或者t = b + det中，选择t大于0并且两个中较小的t。</p>
 <hr>
 <p><img src="http://img.blog.csdn.net/20170408170258582?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<h2 id="2-绘制过程"><a href="#2-绘制过程" class="headerlink" title="2. 绘制过程"></a>2. 绘制过程</h2><h3 id="2-1-放置球的位置"><a href="#2-1-放置球的位置" class="headerlink" title="2.1 放置球的位置"></a>2.1 放置球的位置</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Sphere spheres[] = &#123;</div><div class="line">    Sphere(<span class="number">1e5</span>, Vec(<span class="number">1e5</span> + <span class="number">1</span>, <span class="number">40.8</span>, <span class="number">81.6</span>), Vec(), Vec(<span class="number">.75</span>, <span class="number">.25</span>, <span class="number">.25</span>), Refl_t::DIFF),    <span class="comment">//left</span></div><div class="line">    Sphere(<span class="number">1e5</span>, Vec(<span class="number">-1e5</span> + <span class="number">99</span>,<span class="number">40.8</span>,<span class="number">81.6</span>),Vec(),Vec(<span class="number">.25</span>,<span class="number">.25</span>,<span class="number">.75</span>), Refl_t::DIFF),<span class="comment">//Rght </span></div><div class="line">    Sphere(<span class="number">1e5</span>, Vec(<span class="number">50</span>,<span class="number">40.8</span>, <span class="number">1e5</span>),     Vec(),Vec(<span class="number">.75</span>,<span class="number">.75</span>,<span class="number">.75</span>), Refl_t::DIFF),<span class="comment">//Back </span></div><div class="line">    Sphere(<span class="number">1e5</span>, Vec(<span class="number">50</span>,<span class="number">40.8</span>,<span class="number">-1e5</span> + <span class="number">170</span>), Vec(),Vec(),           Refl_t::DIFF),<span class="comment">//Frnt </span></div><div class="line">    Sphere(<span class="number">1e5</span>, Vec(<span class="number">50</span>, <span class="number">1e5</span>, <span class="number">81.6</span>),    Vec(),Vec(<span class="number">.75</span>,<span class="number">.75</span>,<span class="number">.75</span>),Refl_t::DIFF),<span class="comment">//Botm </span></div><div class="line">    Sphere(<span class="number">1e5</span>, Vec(<span class="number">50</span>,<span class="number">-1e5</span> + <span class="number">81.6</span>,<span class="number">81.6</span>),Vec(),Vec(<span class="number">.75</span>,<span class="number">.75</span>,<span class="number">.75</span>),Refl_t::DIFF),<span class="comment">//Top </span></div><div class="line">    Sphere(<span class="number">16.5</span>,Vec(<span class="number">27</span>,<span class="number">16.5</span>,<span class="number">47</span>),       Vec(),Vec(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)*<span class="number">.999</span>, Refl_t::SPEC),<span class="comment">//Mirr </span></div><div class="line">    Sphere(<span class="number">16.5</span>,Vec(<span class="number">73</span>,<span class="number">16.5</span>,<span class="number">78</span>),       Vec(),Vec(<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>)*<span class="number">.999</span>, Refl_t::REFR),<span class="comment">//Glas </span></div><div class="line">    Sphere(<span class="number">600</span>, Vec(<span class="number">50</span>,<span class="number">681.6</span> - <span class="number">.27</span>,<span class="number">81.6</span>),Vec(<span class="number">12</span>,<span class="number">12</span>,<span class="number">12</span>),  Vec(), Refl_t::DIFF) <span class="comment">//Lite </span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="2-绘制过程"><a href="#2-绘制过程" class="headerlink" title="2. 绘制过程"></a>2. 绘制过程</h2><h3 id="2-1-放置球的位置"><a href="#2-1-放置球的位置" class="headerlink" title="2.1 放置球的位置"></a>2.1 放置球的位置</h3><pre><code class="c">Sphere spheres[] = {
+    Sphere(1e5, Vec(1e5 + 1, 40.8, 81.6), Vec(), Vec(.75, .25, .25), Refl_t::DIFF),    //left
+    Sphere(1e5, Vec(-1e5 + 99,40.8,81.6),Vec(),Vec(.25,.25,.75), Refl_t::DIFF),//Rght 
+    Sphere(1e5, Vec(50,40.8, 1e5),     Vec(),Vec(.75,.75,.75), Refl_t::DIFF),//Back 
+    Sphere(1e5, Vec(50,40.8,-1e5 + 170), Vec(),Vec(),           Refl_t::DIFF),//Frnt 
+    Sphere(1e5, Vec(50, 1e5, 81.6),    Vec(),Vec(.75,.75,.75),Refl_t::DIFF),//Botm 
+    Sphere(1e5, Vec(50,-1e5 + 81.6,81.6),Vec(),Vec(.75,.75,.75),Refl_t::DIFF),//Top 
+    Sphere(16.5,Vec(27,16.5,47),       Vec(),Vec(1,1,1)*.999, Refl_t::SPEC),//Mirr 
+    Sphere(16.5,Vec(73,16.5,78),       Vec(),Vec(1,1,1)*.999, Refl_t::REFR),//Glas 
+    Sphere(600, Vec(50,681.6 - .27,81.6),Vec(12,12,12),  Vec(), Refl_t::DIFF) //Lite 
+};
+</code></pre>
 <p>1）用6个很大的球体当做平面（DIFF属性，只有漫反射），因为半径很大的话，你在近距离看起来，球面就很像一个平面。<br>作者这样做应该是为了避免去写平面求交，平面类等函数。<br>2）用1个球表示光源，就是Lite，1个Mirr球（完全反射），1个Glass球（折射和反射都有）</p>
-<h3 id="2-2-遍历所有的球，求交点"><a href="#2-2-遍历所有的球，求交点" class="headerlink" title="2.2 遍历所有的球，求交点"></a>2.2 遍历所有的球，求交点</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">bool</span> <span class="title">intersect</span><span class="params">(<span class="keyword">const</span> Ray &amp;r, <span class="keyword">double</span> &amp;t, <span class="keyword">int</span> &amp;id)</span> </span>&#123;</div><div class="line">    <span class="keyword">double</span> n = <span class="keyword">sizeof</span>(spheres) / <span class="keyword">sizeof</span>(Sphere), d, inf = t = <span class="number">1e20</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="keyword">int</span>(n); i--;) &#123;</div><div class="line">        <span class="keyword">if</span> ((d = spheres[i].intersect(r)) &amp;&amp; d &lt; t) </div><div class="line">        &#123;</div><div class="line">            t = d;</div><div class="line">            id = i;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> t &lt; inf;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-2-遍历所有的球，求交点"><a href="#2-2-遍历所有的球，求交点" class="headerlink" title="2.2 遍历所有的球，求交点"></a>2.2 遍历所有的球，求交点</h3><pre><code class="c">inline bool intersect(const Ray &amp;r, double &amp;t, int &amp;id) {
+    double n = sizeof(spheres) / sizeof(Sphere), d, inf = t = 1e20;
+    for (int i = int(n); i--;) {
+        if ((d = spheres[i].intersect(r)) &amp;&amp; d &lt; t) 
+        {
+            t = d;
+            id = i;
+        }
+    }
+    return t &lt; inf;
+}
+</code></pre>
 <p>此光线射出去，在所有的球体中求交点。<br>求出距离camera最近的交点，这就是待会要绘制在屏幕上的主要的点。</p>
 <h3 id="2-3-main函数"><a href="#2-3-main函数" class="headerlink" title="2.3 main函数"></a>2.3 main函数</h3><p>1）camera的位置是在（50， 52， 295.6）， 往z轴的负方向看。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">int main(int argc, char *argv[])</div><div class="line">&#123;</div><div class="line">    int w = 1024, h = 768, samps = argc == 2 ? atoi(argv[1]) / 4 : 10; // # samples </div><div class="line">    Ray cam(Vec(50, 52, 295.6), Vec(0, -0.042612, -1).norm()); // cam pos, dir </div><div class="line">    Vec cx = Vec(w*.5135 / h), cy = (cx.cross(cam.d)).norm()*.5135, r, *c = new Vec[w*h];</div><div class="line">    // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>2）遍历每个像素点，用随机采样的方式求得要射出的光线的方向d。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">0</span>; y&lt;h; y++) &#123;                       <span class="comment">// Loop over image rows</span></div><div class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"\rRendering (%d spp) %5.2f%%"</span>, samps * <span class="number">4</span>, <span class="number">100.</span>*y / (h - <span class="number">1</span>));</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">short</span> x = <span class="number">0</span>, Xi[<span class="number">3</span>] = &#123; <span class="number">0</span>,<span class="number">0</span>,y*y*y &#125;; x&lt;w; x++)   <span class="comment">// Loop cols </span></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> sy = <span class="number">0</span>, i = (h - y - <span class="number">1</span>)*w + x; sy&lt;<span class="number">2</span>; sy++)     <span class="comment">// 2x2 subpixel rows </span></div><div class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> sx = <span class="number">0</span>; sx&lt;<span class="number">2</span>; sx++, r = Vec()) &#123;        <span class="comment">// 2x2 subpixel cols </span></div><div class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> s = <span class="number">0</span>; s&lt;samps; s++) &#123;</div><div class="line">                        <span class="keyword">double</span> r1 = <span class="number">2</span> * erand48(Xi), dx = r1&lt;<span class="number">1</span> ? <span class="built_in">sqrt</span>(r1) - <span class="number">1</span> : <span class="number">1</span> - <span class="built_in">sqrt</span>(<span class="number">2</span> - r1);</div><div class="line">                        <span class="keyword">double</span> r2 = <span class="number">2</span> * erand48(Xi), dy = r2&lt;<span class="number">1</span> ? <span class="built_in">sqrt</span>(r2) - <span class="number">1</span> : <span class="number">1</span> - <span class="built_in">sqrt</span>(<span class="number">2</span> - r2);</div><div class="line">                        Vec d = cx*(((sx + <span class="number">.5</span> + dx) / <span class="number">2</span> + x) / w - <span class="number">.5</span>) +</div><div class="line">                            cy*(((sy + <span class="number">.5</span> + dy) / <span class="number">2</span> + y) / h - <span class="number">.5</span>) + cam.d;</div><div class="line">                        r = r + radiance(Ray(cam.o + d * <span class="number">140</span>, d.norm()), <span class="number">0</span>, Xi)*(<span class="number">1.</span> / samps);</div><div class="line">                    &#125; <span class="comment">// Camera rays are pushed ^^^^^ forward to start in interior </span></div><div class="line">                    c[i] = c[i] + Vec(clamp(r.x), clamp(r.y), clamp(r.z))*<span class="number">.25</span>;</div><div class="line">                &#125;</div><div class="line">    &#125;</div><div class="line">    FILE *f = fopen(<span class="string">"image.ppm"</span>, <span class="string">"w"</span>);         <span class="comment">// Write image to PPM file. </span></div><div class="line">    <span class="built_in">fprintf</span>(f, <span class="string">"P3\n%d %d\n%d\n"</span>, w, h, <span class="number">255</span>);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;w*h; i++)</div><div class="line">        <span class="built_in">fprintf</span>(f, <span class="string">"%d %d %d "</span>, toInt(c[i].x), toInt(c[i].y), toInt(c[i].z));</div></pre></td></tr></table></figure></p>
+<pre><code class="java">int main(int argc, char *argv[])
+{
+    int w = 1024, h = 768, samps = argc == 2 ? atoi(argv[1]) / 4 : 10; // # samples 
+    Ray cam(Vec(50, 52, 295.6), Vec(0, -0.042612, -1).norm()); // cam pos, dir 
+    Vec cx = Vec(w*.5135 / h), cy = (cx.cross(cam.d)).norm()*.5135, r, *c = new Vec[w*h];
+    // ...
+}
+</code></pre>
+<p>2）遍历每个像素点，用随机采样的方式求得要射出的光线的方向d。</p>
+<pre><code class="c">for (int y = 0; y&lt;h; y++) {                       // Loop over image rows
+    fprintf(stderr, &quot;\rRendering (%d spp) %5.2f%%&quot;, samps * 4, 100.*y / (h - 1));
+    for (unsigned short x = 0, Xi[3] = { 0,0,y*y*y }; x&lt;w; x++)   // Loop cols 
+        for (int sy = 0, i = (h - y - 1)*w + x; sy&lt;2; sy++)     // 2x2 subpixel rows 
+            for (int sx = 0; sx&lt;2; sx++, r = Vec()) {        // 2x2 subpixel cols 
+                for (int s = 0; s&lt;samps; s++) {
+                    double r1 = 2 * erand48(Xi), dx = r1&lt;1 ? sqrt(r1) - 1 : 1 - sqrt(2 - r1);
+                    double r2 = 2 * erand48(Xi), dy = r2&lt;1 ? sqrt(r2) - 1 : 1 - sqrt(2 - r2);
+                    Vec d = cx*(((sx + .5 + dx) / 2 + x) / w - .5) +
+                            cy*(((sy + .5 + dy) / 2 + y) / h - .5) + cam.d;
+                    r = r + radiance(Ray(cam.o + d * 140, d.norm()), 0, Xi)*(1. / samps);
+                } // Camera rays are pushed ^^^^^ forward to start in interior 
+                c[i] = c[i] + Vec(clamp(r.x), clamp(r.y), clamp(r.z))*.25;
+            }
+}
+FILE *f = fopen(&quot;image.ppm&quot;, &quot;w&quot;);         // Write image to PPM file. 
+fprintf(f, &quot;P3\n%d %d\n%d\n&quot;, w, h, 255);
+for (int i = 0; i&lt;w*h; i++)
+    fprintf(f, &quot;%d %d %d &quot;, toInt(c[i].x), toInt(c[i].y), toInt(c[i].z));
+</code></pre>
 <h3 id="2-4光线跟踪递归函数"><a href="#2-4光线跟踪递归函数" class="headerlink" title="2.4光线跟踪递归函数"></a>2.4光线跟踪递归函数</h3><p>radiance函数在第二部分介绍。<br>以下是大致的分块。</p>
-<p>1)判断是否相交，求交点，求表面法向<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function">Vec <span class="title">radiance</span><span class="params">(<span class="keyword">const</span> Ray &amp;r, <span class="keyword">int</span> depth, <span class="keyword">unsigned</span> <span class="keyword">short</span> *Xi)</span> </span>&#123;</div><div class="line">    <span class="keyword">double</span> t;                               <span class="comment">// distance to intersection </span></div><div class="line">    <span class="keyword">int</span> id = <span class="number">0</span>;                               <span class="comment">// id of intersected object </span></div><div class="line">    <span class="keyword">if</span> (!intersect(r, t, id)) </div><div class="line">        <span class="keyword">return</span> Vec(); <span class="comment">// if miss, return black </span></div><div class="line">    <span class="keyword">const</span> Sphere &amp;obj = spheres[id];        <span class="comment">// the hit object </span></div><div class="line">    Vec x = r.o + r.d*t, n = (x - obj.position).norm();    <span class="comment">// calculate vector n,球面法向量</span></div><div class="line">    Vec nl = n.dot(r.d) &lt; <span class="number">0</span> ? n : n*<span class="number">-1</span>, f = obj.color;</div><div class="line">    <span class="keyword">double</span> p = f.x&gt;f.y &amp;&amp; f.x&gt;f.z ? f.x : f.y&gt;f.z ? f.y : f.z; <span class="comment">// max refl </span></div><div class="line">    <span class="keyword">if</span> (++depth&gt;<span class="number">5</span>||!p) </div><div class="line">        <span class="keyword">if</span> (erand48(Xi)&lt;p) </div><div class="line">            f = f*(<span class="number">1</span> / p); </div><div class="line">        <span class="keyword">else</span>  </div><div class="line">            <span class="keyword">return</span> obj.emission;</div></pre></td></tr></table></figure></p>
-<p>2）漫反射（DIFF）<br>如果材质是漫反射，那么就随机生成一个方向进行漫反射。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (obj.refl == DIFF) &#123;                  <span class="comment">// Ideal DIFFUSE reflection </span></div><div class="line">    <span class="keyword">double</span> r1 = <span class="number">2</span> * M_PI*erand48(Xi), r2 = erand48(Xi), r2s = <span class="built_in">sqrt</span>(r2);</div><div class="line">    Vec w = nl, u = ((<span class="built_in">fabs</span>(w.x)&gt;<span class="number">.1</span> ? Vec(<span class="number">0</span>, <span class="number">1</span>) : Vec(<span class="number">1</span>)).cross(w)).norm(), v = w.cross(u);    <span class="comment">//w，v，u为正交基</span></div><div class="line">    Vec d = (u*<span class="built_in">cos</span>(r1)*r2s + v*<span class="built_in">sin</span>(r1)*r2s + w*<span class="built_in">sqrt</span>(<span class="number">1</span> - r2)).norm();</div><div class="line">    <span class="keyword">return</span> obj.emission + f.mult(radiance(Ray(x, d), depth, Xi));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>3）镜面反射（材质为SPEC）<br>计算镜面反射的方向，然后继续递归<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (obj.refl == SPEC)            <span class="comment">// Ideal SPECULAR reflection </span></div><div class="line">        <span class="keyword">return</span> obj.emission + f.mult(radiance(Ray(x, r.d - n * <span class="number">2</span> * n.dot(r.d)), depth, Xi));</div></pre></td></tr></table></figure></p>
-<p>4）反射和折射（材质为REFR）<br>玻璃材质，有一部分光进行反射，有一部分光进行折射。<br>这里用到了轮盘赌方法。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Ray reflRay(x, r.d - n * 2 * n.dot(r.d));     // Ideal dielectric REFRACTION 由平行四边形的方法求得反射光的direction</div><div class="line">    bool into = n.dot(nl)&gt;0;                // Ray from outside going in? </div><div class="line">    double nc = 1, nt = 1.5, nnt = into ? nc / nt : nt / nc, ddn = r.d.dot(nl), cos2t;</div><div class="line">    if ((cos2t = 1 - nnt*nnt*(1 - ddn*ddn))&lt;0)    // Total internal reflection </div><div class="line">        return obj.emission + f.mult(radiance(reflRay, depth, Xi));</div><div class="line">    Vec tdir = (r.d*nnt - n*((into ? 1 : -1)*(ddn*nnt + sqrt(cos2t)))).norm();</div><div class="line">    double a = nt - nc, b = nt + nc, R0 = a*a / (b*b), c = 1 - (into ? -ddn : tdir.dot(n));</div><div class="line">    double Re = R0 + (1 - R0)*c*c*c*c*c, Tr = 1 - Re, P = .25 + .5*Re, RP = Re / P, TP = Tr / (1 - P);</div><div class="line">    return obj.emission + f.mult(depth&gt;2 ? (erand48(Xi)&lt;P ?   // Russian roulette </div><div class="line">        radiance(reflRay, depth, Xi)*RP : radiance(Ray(x, tdir), depth, Xi)*TP) :</div><div class="line">        radiance(reflRay, depth, Xi)*Re + radiance(Ray(x, tdir), depth, Xi)*Tr);</div></pre></td></tr></table></figure></p>
+<p>1)判断是否相交，求交点，求表面法向</p>
+<pre><code class="c">Vec radiance(const Ray &amp;r, int depth, unsigned short *Xi) {
+    double t;                               // distance to intersection 
+    int id = 0;                               // id of intersected object 
+    if (!intersect(r, t, id)) 
+        return Vec(); // if miss, return black 
+    const Sphere &amp;obj = spheres[id];        // the hit object 
+    Vec x = r.o + r.d*t, n = (x - obj.position).norm();    // calculate vector n,球面法向量
+    Vec nl = n.dot(r.d) &lt; 0 ? n : n*-1, f = obj.color;
+    double p = f.x&gt;f.y &amp;&amp; f.x&gt;f.z ? f.x : f.y&gt;f.z ? f.y : f.z; // max refl 
+    if (++depth&gt;5||!p) 
+        if (erand48(Xi)&lt;p) 
+            f = f*(1 / p); 
+        else  
+            return obj.emission; 
+    // ...
+}
+</code></pre>
+<p>2）漫反射（DIFF）<br>如果材质是漫反射，那么就随机生成一个方向进行漫反射。</p>
+<pre><code class="c">if (obj.refl == DIFF) {                  // Ideal DIFFUSE reflection 
+    double r1 = 2 * M_PI*erand48(Xi), r2 = erand48(Xi), r2s = sqrt(r2);
+    Vec w = nl, u = ((fabs(w.x)&gt;.1 ? Vec(0, 1) : Vec(1)).cross(w)).norm(), v = w.cross(u);    //w，v，u为正交基
+    Vec d = (u*cos(r1)*r2s + v*sin(r1)*r2s + w*sqrt(1 - r2)).norm();
+    return obj.emission + f.mult(radiance(Ray(x, d), depth, Xi));
+}
+</code></pre>
+<p>3）镜面反射（材质为SPEC）<br>计算镜面反射的方向，然后继续递归</p>
+<pre><code class="c">else if (obj.refl == SPEC)            // Ideal SPECULAR reflection 
+    return obj.emission + f.mult(radiance(Ray(x, r.d - n * 2 * n.dot(r.d)), depth, Xi));
+</code></pre>
+<p>4）反射和折射（材质为REFR）<br>玻璃材质，有一部分光进行反射，有一部分光进行折射。<br>这里用到了轮盘赌方法。</p>
+<pre><code class="c">else {
+    Ray reflRay(x, r.d - n * 2 * n.dot(r.d));     // Ideal dielectric REFRACTION 由平行四边形的方法求得反射光的direction
+    bool into = n.dot(nl)&gt;0;                // Ray from outside going in? 
+    double nc = 1, nt = 1.5, nnt = into ? nc / nt : nt / nc, ddn = r.d.dot(nl), cos2t;
+    if ((cos2t = 1 - nnt*nnt*(1 - ddn*ddn))&lt;0)    // Total internal reflection 
+        return obj.emission + f.mult(radiance(reflRay, depth, Xi));
+    Vec tdir = (r.d*nnt - n*((into ? 1 : -1)*(ddn*nnt + sqrt(cos2t)))).norm();
+    double a = nt - nc, b = nt + nc, R0 = a*a / (b*b), c = 1 - (into ? -ddn : tdir.dot(n));
+    double Re = R0 + (1 - R0)*c*c*c*c*c, Tr = 1 - Re, P = .25 + .5*Re, RP = Re / P, TP = Tr / (1 - P);
+    return obj.emission + f.mult(depth&gt;2 ? (erand48(Xi)&lt;P ?   // Russian roulette 
+        radiance(reflRay, depth, Xi)*RP : radiance(Ray(x, tdir), depth, Xi)*TP) :
+        radiance(reflRay, depth, Xi)*Re + radiance(Ray(x, tdir), depth, Xi)*Tr);
+}
+</code></pre>
 <hr>
 <p>参考链接：<br>[1]<a href="https://drive.google.com/file/d/0B8g97JkuSSBwUENiWTJXeGtTOHFmSm51UC01YWtCZw/view" target="_blank" rel="external">https://drive.google.com/file/d/0B8g97JkuSSBwUENiWTJXeGtTOHFmSm51UC01YWtCZw/view</a></p>
 <p>[2]<a href="http://www.kevinbeason.com/smallpt/#moreinfo" target="_blank" rel="external">http://www.kevinbeason.com/smallpt/#moreinfo</a></p>
@@ -361,8 +519,18 @@ gitment.render('container')
 
     <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
 	</script>
-</footer>
 
+	
+	<!--prettify代码高亮脚本引入-->
+	<script src="/plugins/prettify/prettify.js"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+			prettyPrint();
+		};
+	</script>
+	
+</footer>
             </div>
             
                 <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">

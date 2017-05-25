@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
     
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,6 +38,9 @@
     <!--STYLES END-->
     
     
+    
+    <!--prettify代码高亮主题css引入-->
+    <link href="/plugins/prettify/prettify.css" rel="stylesheet">
 </head>
 
     <body>
@@ -251,8 +255,18 @@
 
     <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
 	</script>
-</footer>
 
+	
+	<!--prettify代码高亮脚本引入-->
+	<script src="/plugins/prettify/prettify.js"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+			prettyPrint();
+		};
+	</script>
+	
+</footer>
             </div>
             
         </div>

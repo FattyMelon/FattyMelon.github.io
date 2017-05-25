@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
     
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,6 +48,9 @@
     <!--STYLES END-->
     
     
+    
+    <!--prettify代码高亮主题css引入-->
+    <link href="/plugins/prettify/prettify.css" rel="stylesheet">
 </head>
 
     <body>
@@ -229,17 +233,29 @@
         <div class="main-content-wrap">
             <p>本文主要说一下自己的理解，<br>关于smallpt的cx,cy是怎么来的，是用来做什么的？<br><a id="more"></a></p>
 <h2 id="1-透视投影的原理"><a href="#1-透视投影的原理" class="headerlink" title="1. 透视投影的原理"></a>1. 透视投影的原理</h2><p><img src="http://img.blog.csdn.net/20170408195926856?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>如果是小孔成像的话，我们应该是投影在z=-d的平面上，但是这样做涉及到负值操作，还使图像反了。如果我们将投影平面移到z = d，这样做就可以避免负值问题。（但是有个问题就是，物体在摄像机和z=d平面之间的物体，电脑就无法绘制了）</p>
-<h2 id="2-cx和cy的定义"><a href="#2-cx和cy的定义" class="headerlink" title="2. cx和cy的定义"></a>2. cx和cy的定义</h2><p><img src="http://img.blog.csdn.net/20170408180858973?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>及计算光线d的代码<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Vec d = cx*(((sx + <span class="number">.5</span> + dx) / <span class="number">2</span> + x) / w - <span class="number">.5</span>) +</div><div class="line">            cy*(((sy + <span class="number">.5</span> + dy) / <span class="number">2</span> + y) / h - <span class="number">.5</span>) + cam.d;</div></pre></td></tr></table></figure></p>
+<h2 id="2-cx和cy的定义"><a href="#2-cx和cy的定义" class="headerlink" title="2. cx和cy的定义"></a>2. cx和cy的定义</h2><p><img src="http://img.blog.csdn.net/20170408180858973?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>及计算光线d的代码</p>
+<pre><code class="c">Vec d = cx*(((sx + .5 + dx) / 2 + x) / w - .5) +
+            cy*(((sy + .5 + dy) / 2 + y) / h - .5) + cam.d;
+</code></pre>
 <p>其中sx,sy是[0,1]，dx,dy的范围是[-1,1]，dx,dy的分布函数<br><img src="http://img.blog.csdn.net/20170408200506124?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p>所以(sx + .5 + dx) / 2这个的值得范围是[-0.25, 0.75]。这个值主要是为了在随机采样时，对x进行偏移。我们如果把他忽略不计。<br>那么(((sx + .5 + dx) / 2 + x) / w - .5)的值其实是在[-0.5, 0.5]的。<br>当x = w-1, y = 0时，<br>(0.5 <em> cx)+(-0.5 </em> cy)+cam.d是为了计算最大角度的射出光线。</p>
 <p>图例1， 如果我们的cx = (w / h)<br><img src="http://img.blog.csdn.net/20170408200023623?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p>图例2， 如果我们的cx = (w/h *0.5135)，我们的最大角度肯定比图例1小。<br><img src="http://img.blog.csdn.net/20170408200032935?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p>###3. 验证结果<br>我的理解是：<br>0.5135这个参数就是为了设置视角大小的。<br>作者计算好了角度之后，才这样设置的。</p>
-<p>例子1<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">double</span> testVal = <span class="number">1.0</span>;</div><div class="line"><span class="keyword">double</span> cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;</div></pre></td></tr></table></figure></p>
+<p>例子1</p>
+<pre><code class="c">double testVal = 1.0;
+double cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;
+</code></pre>
 <p><img src="http://img.blog.csdn.net/20170408202111900?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>例子2<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">double</span> testVal = <span class="number">0.5135</span>;</div><div class="line"><span class="keyword">double</span> cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;</div></pre></td></tr></table></figure></p>
+<p>例子2</p>
+<pre><code class="c">double testVal = 0.5135;
+double cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;
+</code></pre>
 <p><img src="http://img.blog.csdn.net/20170408202302541?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>例子3<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">double</span> testVal = <span class="number">0.2</span>;</div><div class="line"><span class="keyword">double</span> cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;</div></pre></td></tr></table></figure></p>
+<p>例子3</p>
+<pre><code class="c">double testVal = 0.2;
+double cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;
+</code></pre>
 <p><img src="http://img.blog.csdn.net/20170408202608815?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 
             
@@ -350,8 +366,18 @@ gitment.render('container')
 
     <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
 	</script>
-</footer>
 
+	
+	<!--prettify代码高亮脚本引入-->
+	<script src="/plugins/prettify/prettify.js"></script>
+	<script type="text/javascript">
+		window.onload = function(){
+			$('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+			prettyPrint();
+		};
+	</script>
+	
+</footer>
             </div>
             
                 <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
