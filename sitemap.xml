@@ -2,16 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://fattymelon.github.io/2017/05/24/hello-world/</loc>
+    <loc>https://fattymelon.github.io/2017/04/25/raytracing3/</loc>
     
-    <lastmod>2017-05-25T05:39:39.000Z</lastmod>
+    <lastmod>2017-05-25T06:57:59.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://fattymelon.github.io/2017/03/20/hello-world/</loc>
+    
+    <lastmod>2017-05-25T06:56:36.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://fattymelon.github.io/2017/04/22/raytracing2/</loc>
+    
+    <lastmod>2017-05-25T06:55:58.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://fattymelon.github.io/2017/04/20/raytracing1/</loc>
+    
+    <lastmod>2017-05-25T06:55:42.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://fattymelon.github.io/2017/05/24/hexo_access/</loc>
     
-    <lastmod>2017-05-25T02:56:50.000Z</lastmod>
+    <lastmod>2017-05-25T06:21:17.000Z</lastmod>
     
   </url>
   

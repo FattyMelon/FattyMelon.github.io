@@ -6,28 +6,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Simon&#39; Blog">
-    <title>Hexo接入Gitment评论 - Simon&#39; Blog</title>
+    <title>smallpt详解(二) - Simon&#39; Blog</title>
     <meta name="author" content="Simon chen">
     
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="做好博客之后想添加评论功能。第三方评论有多说，disqus，网易云跟帖等，但是多说即将关闭，disqus好不容易弄好，老是加载不出来，网易嘛，他申请的时候域名github.io已经被占用就不行了。所以就接入了国内大神做的Gitment">
-<meta name="keywords" content="gitment,hexo">
+    <meta name="description" content="本文主要说一下自己的理解，关于smallpt的cx,cy是怎么来的，是用来做什么的？">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Hexo接入Gitment评论">
-<meta property="og:url" content="https://fattymelon.github.io/2017/05/24/hexo_access/index.html">
+<meta property="og:title" content="smallpt详解(二)">
+<meta property="og:url" content="https://fattymelon.github.io/2017/04/22/raytracing2/index.html">
 <meta property="og:site_name" content="Simon&#39; Blog">
-<meta property="og:description" content="做好博客之后想添加评论功能。第三方评论有多说，disqus，网易云跟帖等，但是多说即将关闭，disqus好不容易弄好，老是加载不出来，网易嘛，他申请的时候域名github.io已经被占用就不行了。所以就接入了国内大神做的Gitment">
-<meta property="og:image" content="https://fattymelon.github.io/2017/05/24/hexo_access/Oauth.png">
-<meta property="og:image" content="https://fattymelon.github.io/2017/05/24/hexo_access/comment.png">
-<meta property="og:image" content="https://fattymelon.github.io/2017/05/24/hexo_access/issue.png">
-<meta property="og:updated_time" content="2017-05-25T06:21:17.000Z">
+<meta property="og:description" content="本文主要说一下自己的理解，关于smallpt的cx,cy是怎么来的，是用来做什么的？">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408195926856?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408180858973?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408200506124?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408200023623?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408200032935?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408202111900?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408202302541?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170408202608815?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-05-25T06:55:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo接入Gitment评论">
-<meta name="twitter:description" content="做好博客之后想添加评论功能。第三方评论有多说，disqus，网易云跟帖等，但是多说即将关闭，disqus好不容易弄好，老是加载不出来，网易嘛，他申请的时候域名github.io已经被占用就不行了。所以就接入了国内大神做的Gitment">
-<meta name="twitter:image" content="https://fattymelon.github.io/2017/05/24/hexo_access/Oauth.png">
+<meta name="twitter:title" content="smallpt详解(二)">
+<meta name="twitter:description" content="本文主要说一下自己的理解，关于smallpt的cx,cy是怎么来的，是用来做什么的？">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170408195926856?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
     
     
         
@@ -199,20 +203,20 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title" itemprop="headline">
-            Hexo接入Gitment评论
+            smallpt详解(二)
         </h1>
     
     
         <div class="post-meta">
-    <time itemprop="datePublished" datetime="2017-05-24T10:59:21+08:00">
+    <time itemprop="datePublished" datetime="2017-04-22T14:26:55+08:00">
 	
-		    May 24, 2017
+		    Apr 22, 2017
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/hexo/">hexo</a>
+    <a class="category-link" href="/categories/光线跟踪/">光线跟踪</a>
 
 
     
@@ -223,27 +227,26 @@
     
     <div class="post-content markdown" itemprop="articleBody">
         <div class="main-content-wrap">
-            <p>做好博客之后想添加评论功能。第三方评论有多说，disqus，网易云跟帖等，但是多说即将关闭，disqus好不容易弄好，老是加载不出来，网易嘛，他申请的时候域名github.io已经被占用就不行了。所以就接入了国内大神做的<a href="https://github.com/imsun/gitment" target="_blank" rel="external">Gitment</a></p>
-<a id="more"></a>
-<h2 id="Gitment"><a href="#Gitment" class="headerlink" title="Gitment"></a>Gitment</h2><h3 id="1-注册-OAuth-Application"><a href="#1-注册-OAuth-Application" class="headerlink" title="1. 注册 OAuth Application"></a>1. 注册 OAuth Application</h3><p><a href="https://github.com/settings/applications/new" target="_blank" rel="external">点击此处</a>注册一个Oauth Application，其他信息可以随意，但是确保填入正确的 callback URL（一般是评论页面对应的域名，图中写的是xxxx.github.io）<br><div class="figure " style="width:600px;"><a class="fancybox" href="./Oauth.png" title="注册网站填写信息" data-fancybox-group=""><img class="fig-img" src="./Oauth.png" style="width:600px;" alt="注册网站填写信息"></a><span class="caption">注册网站填写信息</span></div><div style="clear:both;"></div></p>
-<p>注册完成后会得到一个client id和client secret</p>
-<h3 id="2-接入-Gitment"><a href="#2-接入-Gitment" class="headerlink" title="2. 接入 Gitment"></a>2. 接入 Gitment</h3><p>根据备注把内容填好，并将代码放入评论页面<br><strong>这里最重要的是repo，很多人不知道应该填什么，如果你用的是github page，那你只需要把xxxx改成你自己的name就好</strong></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;div id=<span class="string">"container"</span>&gt;&lt;/div&gt;</div><div class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"https://imsun.github.io/gitment/style/default.css"</span>&gt;</div><div class="line">&lt;script src="https://imsun.github.io/gitment/dist/gitment.browser.js"&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line"><span class="keyword">var</span> gitment = <span class="keyword">new</span> Gitment(&#123;</div><div class="line">  <span class="attr">owner</span>: <span class="string">'xxxx'</span>, <span class="comment">//github name,必须是注册时候的名字，就是下面这一行的xxxx</span></div><div class="line">  repo: <span class="string">'xxxx.github.io'</span>, <span class="comment">//存储评论的repositories 名字</span></div><div class="line">  oauth: &#123;</div><div class="line">    <span class="attr">client_id</span>: <span class="string">'你的 client ID'</span>,</div><div class="line">    <span class="attr">client_secret</span>: <span class="string">'你的 client secret'</span>,</div><div class="line">  &#125;,</div><div class="line">&#125;)</div><div class="line">gitment.render(<span class="string">'container'</span>)</div><div class="line">&lt;<span class="regexp">/script&gt;</span></div></pre></td></tr></table></figure>
-<h3 id="3-初始化"><a href="#3-初始化" class="headerlink" title="3. 初始化"></a>3. 初始化</h3><p>配置好以后，会在你的页面看到一个初始化按钮。<br><div class="figure " style="width:600px;"><a class="fancybox" href="./comment.png" title="" data-fancybox-group=""><img class="fig-img" src="./comment.png" style="width:600px;" alt=""></a></div><div style="clear:both;"></div></p>
-<p>点击之后会在你的repo的issues页面下创建对应的issue.<br><div class="figure " style="width:600px;"><a class="fancybox" href="./issue.png" title="" data-fancybox-group=""><img class="fig-img" src="./issue.png" style="width:600px;" alt=""></a></div><div style="clear:both;"></div></p>
-<h3 id="4-测试"><a href="#4-测试" class="headerlink" title="4. 测试"></a>4. 测试</h3><p>测试的话直接就可以在博客底下评论啦。哈哈哈哈</p>
+            <p>本文主要说一下自己的理解，<br>关于smallpt的cx,cy是怎么来的，是用来做什么的？<br><a id="more"></a></p>
+<h2 id="1-透视投影的原理"><a href="#1-透视投影的原理" class="headerlink" title="1. 透视投影的原理"></a>1. 透视投影的原理</h2><p><img src="http://img.blog.csdn.net/20170408195926856?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>如果是小孔成像的话，我们应该是投影在z=-d的平面上，但是这样做涉及到负值操作，还使图像反了。如果我们将投影平面移到z = d，这样做就可以避免负值问题。（但是有个问题就是，物体在摄像机和z=d平面之间的物体，电脑就无法绘制了）</p>
+<h2 id="2-cx和cy的定义"><a href="#2-cx和cy的定义" class="headerlink" title="2. cx和cy的定义"></a>2. cx和cy的定义</h2><p><img src="http://img.blog.csdn.net/20170408180858973?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>及计算光线d的代码<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Vec d = cx*(((sx + <span class="number">.5</span> + dx) / <span class="number">2</span> + x) / w - <span class="number">.5</span>) +</div><div class="line">            cy*(((sy + <span class="number">.5</span> + dy) / <span class="number">2</span> + y) / h - <span class="number">.5</span>) + cam.d;</div></pre></td></tr></table></figure></p>
+<p>其中sx,sy是[0,1]，dx,dy的范围是[-1,1]，dx,dy的分布函数<br><img src="http://img.blog.csdn.net/20170408200506124?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>所以(sx + .5 + dx) / 2这个的值得范围是[-0.25, 0.75]。这个值主要是为了在随机采样时，对x进行偏移。我们如果把他忽略不计。<br>那么(((sx + .5 + dx) / 2 + x) / w - .5)的值其实是在[-0.5, 0.5]的。<br>当x = w-1, y = 0时，<br>(0.5 <em> cx)+(-0.5 </em> cy)+cam.d是为了计算最大角度的射出光线。</p>
+<p>图例1， 如果我们的cx = (w / h)<br><img src="http://img.blog.csdn.net/20170408200023623?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>图例2， 如果我们的cx = (w/h *0.5135)，我们的最大角度肯定比图例1小。<br><img src="http://img.blog.csdn.net/20170408200032935?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>###3. 验证结果<br>我的理解是：<br>0.5135这个参数就是为了设置视角大小的。<br>作者计算好了角度之后，才这样设置的。</p>
+<p>例子1<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">double</span> testVal = <span class="number">1.0</span>;</div><div class="line"><span class="keyword">double</span> cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;</div></pre></td></tr></table></figure></p>
+<p><img src="http://img.blog.csdn.net/20170408202111900?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>例子2<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">double</span> testVal = <span class="number">0.5135</span>;</div><div class="line"><span class="keyword">double</span> cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;</div></pre></td></tr></table></figure></p>
+<p><img src="http://img.blog.csdn.net/20170408202302541?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>例子3<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">double</span> testVal = <span class="number">0.2</span>;</div><div class="line"><span class="keyword">double</span> cx = Vec(w * testVal / h), cy = (cx.cross(cam.d)).norm() * testVal;</div></pre></td></tr></table></figure></p>
+<p><img src="http://img.blog.csdn.net/20170408202608815?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 
             
         </div>
     </div>
     <div id="post-footer" class="post-footer main-content-wrap">
         <div class="post-footer-tags">
-            
-                <span class="text-color-light text-small">TAGGED IN</span><br/>
-                
-    <a class="tag tag--primary tag--small t-link" href="/tags/gitment/">gitment</a> <a class="tag tag--primary tag--small t-link" href="/tags/hexo/">hexo</a>
-
-
             
             </br>
             <span id="busuanzi_container_page_pv" class="text-color-light text-small">
@@ -256,7 +259,7 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--disabled">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/04/25/raytracing3/"  data-tooltip="smallpt详解(三)">
                 
                     <i class="fa fa-angle-left"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -264,7 +267,7 @@
             </li>
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/04/25/raytracing3/" data-tooltip="smallpt详解(三)">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/04/20/raytracing1/" data-tooltip="smallpt详解(一)">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
                     <i class="fa fa-angle-right"></i>
@@ -282,7 +285,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/04/22/raytracing2/">
                     <i class="fa fa-facebook-official"></i>
                 </a>
             </li>
@@ -290,7 +293,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/04/22/raytracing2/">
                     <i class="fa fa-twitter"></i>
                 </a>
             </li>
@@ -298,7 +301,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/04/22/raytracing2/">
                     <i class="fa fa-google-plus"></i>
                 </a>
             </li>
@@ -357,7 +360,7 @@ gitment.render('container')
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--disabled">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/04/25/raytracing3/"  data-tooltip="smallpt详解(三)">
                 
                     <i class="fa fa-angle-left"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
@@ -365,7 +368,7 @@ gitment.render('container')
             </li>
             <li class="post-action">
                 
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/04/25/raytracing3/" data-tooltip="smallpt详解(三)">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/04/20/raytracing1/" data-tooltip="smallpt详解(一)">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
                     <i class="fa fa-angle-right"></i>
@@ -383,7 +386,7 @@ gitment.render('container')
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/04/22/raytracing2/">
                     <i class="fa fa-facebook-official"></i>
                 </a>
             </li>
@@ -391,7 +394,7 @@ gitment.render('container')
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/04/22/raytracing2/">
                     <i class="fa fa-twitter"></i>
                 </a>
             </li>
@@ -399,7 +402,7 @@ gitment.render('container')
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/04/22/raytracing2/">
                     <i class="fa fa-google-plus"></i>
                 </a>
             </li>
@@ -424,7 +427,7 @@ gitment.render('container')
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/04/22/raytracing2/">
                     <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
                 </a>
             </li>
@@ -432,7 +435,7 @@ gitment.render('container')
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/04/22/raytracing2/">
                     <i class="fa fa-twitter"></i><span>Share on Twitter</span>
                 </a>
             </li>
@@ -440,7 +443,7 @@ gitment.render('container')
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/04/22/raytracing2/">
                     <i class="fa fa-google-plus"></i><span>Share on Google+</span>
                 </a>
             </li>
