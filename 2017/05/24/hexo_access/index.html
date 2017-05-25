@@ -6,22 +6,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Simon chen的博客">
-    <title>Simon chen的博客</title>
+    <title>Hexo接入Gitment评论 - Simon chen的博客</title>
     <meta name="author" content="Simon chen">
     
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="good good study, day day up. ahaha!">
+    <meta name="description" content="&amp;lt;!more&amp;gt; Gitment1. 注册 OAuth Application点击此处注册一个Oauth Application，其他信息可以随意，但是确保填入正确的 callback URL（一般是评论页面对应的域名，图中写的是xxxx.github.io）注册完成后会得到一个client id和client secret 2. 接入 Gitment根据备注把内容填好，并将代码放入评论">
+<meta name="keywords" content="gitment,hexo">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Simon chen的博客">
-<meta property="og:url" content="https://fattymelon.github.io/index.html">
+<meta property="og:title" content="Hexo接入Gitment评论">
+<meta property="og:url" content="https://fattymelon.github.io/2017/05/24/hexo_access/index.html">
 <meta property="og:site_name" content="Simon chen的博客">
-<meta property="og:description" content="good good study, day day up. ahaha!">
+<meta property="og:description" content="&amp;lt;!more&amp;gt; Gitment1. 注册 OAuth Application点击此处注册一个Oauth Application，其他信息可以随意，但是确保填入正确的 callback URL（一般是评论页面对应的域名，图中写的是xxxx.github.io）注册完成后会得到一个client id和client secret 2. 接入 Gitment根据备注把内容填好，并将代码放入评论">
+<meta property="og:image" content="https://fattymelon.github.io/2017/05/24/hexo_access/Oauth.png">
+<meta property="og:image" content="https://fattymelon.github.io/2017/05/24/hexo_access/comment.png">
+<meta property="og:image" content="https://fattymelon.github.io/2017/05/24/hexo_access/issue.png">
+<meta property="og:image" content="https://fattymelon.github.io/2017/05/24/hexo_access/test.png">
+<meta property="og:updated_time" content="2017-05-25T02:38:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Simon chen的博客">
-<meta name="twitter:description" content="good good study, day day up. ahaha!">
+<meta name="twitter:title" content="Hexo接入Gitment评论">
+<meta name="twitter:description" content="&amp;lt;!more&amp;gt; Gitment1. 注册 OAuth Application点击此处注册一个Oauth Application，其他信息可以随意，但是确保填入正确的 callback URL（一般是评论页面对应的域名，图中写的是xxxx.github.io）注册完成后会得到一个client id和client secret 2. 接入 Gitment根据备注把内容填好，并将代码放入评论">
+<meta name="twitter:image" content="https://fattymelon.github.io/2017/05/24/hexo_access/Oauth.png">
     
     
         
@@ -50,7 +57,7 @@
         
     
 
-<header id="header" data-behavior="1">
+<header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
         <a class="header-title-link" href="/ ">Simon chen的博客</a>
@@ -74,7 +81,7 @@
         
     
 
-<nav id="sidebar" data-behavior="1">
+<nav id="sidebar" data-behavior="4">
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
@@ -189,25 +196,22 @@
 </nav>
 
             
-            <div id="main" data-behavior="1"
+            <div id="main" data-behavior="4"
                  class="
                         hasCoverMetaIn
                         ">
-                <section class="postShorten-group main-content-wrap">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
     
     
-    <article class="postShorten postShorten--thumbnailimg-bottom" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2017/05/24/hexo_access/">
-                            Hexo接入Gitment评论
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Hexo接入Gitment评论
+        </h1>
+    
+    
+        <div class="post-meta">
     <time itemprop="datePublished" datetime="2017-05-24T10:59:21+08:00">
 	
 		    May 24, 2017
@@ -222,77 +226,122 @@
     
 </div>
 
-            </div>
-            
-                <div class="postShorten-content" itemprop="articleBody">
-                    <p>&lt;!more&gt;</p>
+    
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>&lt;!more&gt;</p>
 <h2 id="Gitment"><a href="#Gitment" class="headerlink" title="Gitment"></a>Gitment</h2><h3 id="1-注册-OAuth-Application"><a href="#1-注册-OAuth-Application" class="headerlink" title="1. 注册 OAuth Application"></a>1. 注册 OAuth Application</h3><p><a href="https://github.com/settings/applications/new" target="_blank" rel="external">点击此处</a>注册一个Oauth Application，其他信息可以随意，但是确保填入正确的 callback URL（一般是评论页面对应的域名，图中写的是xxxx.github.io）<br><img src="./Oauth.png" alt=""><br>注册完成后会得到一个client id和client secret</p>
 <h3 id="2-接入-Gitment"><a href="#2-接入-Gitment" class="headerlink" title="2. 接入 Gitment"></a>2. 接入 Gitment</h3><p>根据备注把内容填好，并将代码放入评论页面<br><strong>这里最重要的是repo，很多人不知道应该填什么，如果你用的是github page，那你只需要把xxxx改成你自己的name就好</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;div id=<span class="string">"container"</span>&gt;&lt;/div&gt;</div><div class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"https://imsun.github.io/gitment/style/default.css"</span>&gt;</div><div class="line">&lt;script src="https://imsun.github.io/gitment/dist/gitment.browser.js"&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line"><span class="keyword">var</span> gitment = <span class="keyword">new</span> Gitment(&#123;</div><div class="line">  <span class="attr">owner</span>: <span class="string">'xxxx'</span>, <span class="comment">//github name,必须是注册时候的名字，就是下面这一行的xxxx</span></div><div class="line">  repo: <span class="string">'xxxx.github.io'</span>, <span class="comment">//存储评论的repositories 名字</span></div><div class="line">  oauth: &#123;</div><div class="line">    <span class="attr">client_id</span>: <span class="string">'你的 client ID'</span>,</div><div class="line">    <span class="attr">client_secret</span>: <span class="string">'你的 client secret'</span>,</div><div class="line">  &#125;,</div><div class="line">&#125;)</div><div class="line">gitment.render(<span class="string">'container'</span>)</div><div class="line">&lt;<span class="regexp">/script&gt;</span></div></pre></td></tr></table></figure></p>
 <h3 id="3-初始化"><a href="#3-初始化" class="headerlink" title="3. 初始化"></a>3. 初始化</h3><p>配置好以后，会在你的页面看到一个初始化按钮。<br>点击之后会在你的repo的issues页面下创建对应的issue.<br><img src="./comment.png" alt=""><br><img src="./issue.png" alt=""></p>
 <h3 id="4-测试"><a href="#4-测试" class="headerlink" title="4. 测试"></a>4. 测试</h3><p><img src="./test.png" alt="测试图片"><br>大功告成</p>
 
-                    
-                        
-                    
-                    
-                        <p>
-                            <a href="/2017/05/24/hexo_access/#post-footer" class="postShorten-excerpt_link link">
-                                Comment and share
-                            </a>
-                        </p>
-                    
-                </div>
             
         </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-right" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        <div class="post-footer-tags">
             
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2017/05/24/hello-world/">
-                            Hello World
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2017-05-24T10:00:14+08:00">
-	
-		    May 24, 2017
-    	
-    </time>
-    
-</div>
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/gitment/">gitment</a> <a class="tag tag--primary tag--small t-link" href="/tags/hexo/">hexo</a>
 
-            </div>
+
             
-                <div class="postShorten-excerpt" itemprop="articleBody">
-                    <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-                    
-                        <a href="/2017/05/24/hello-world/" class="postShorten-excerpt_link link">
-                            Continue reading
-                        </a>
-                        
-                    
-                </div>
-            
+            </br>
+            <span id="busuanzi_container_page_pv" class="text-color-light text-small">
+            Viewd <span id="busuanzi_value_page_pv"></span> times
+            </span>
         </div>
         
-    </article>
-    
-    <div class="pagination-bar">
-    <ul class="pagination">
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/05/24/hello-world/" data-tooltip="Hello World">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                    <i class="fa fa-facebook-official"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                    <i class="fa fa-twitter"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </li>
         
         
-        <li class="pagination-number">page 1 of 1</li>
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
     </ul>
 </div>
 
-</section>
+
+        
+        
+            
+            
+                <div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: 'FattyMelon',
+  repo: 'FattyMelon.github.io',
+  oauth: {
+    client_id: 'ae5e1fbec7bfdd022624',
+    client_secret: '20d776f046a5cfca506202f4f5116d7d1c041942',
+  },
+})
+gitment.render('container')
+</script>
+            
+        
+    </div>
+</article>
+
 
 
                 <footer id="footer" class="main-content-wrap">
@@ -305,6 +354,104 @@
 </footer>
 
             </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/05/24/hello-world/" data-tooltip="Hello World">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                    <i class="fa fa-facebook-official"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                    <i class="fa fa-twitter"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </li>
+        
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                    <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                    <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/05/24/hexo_access/">
+                    <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
             
         </div>
         
@@ -420,6 +567,8 @@
         <!--SCRIPTS-->
 <script src="/assets/js/script-ivwiy10zeb8fifc4swnhkwneuk64y53w2scmdmtp8thi9cqfxh31aowtroaz.min.js"></script>
 <!--SCRIPTS END-->
+
+    
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>

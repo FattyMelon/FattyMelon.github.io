@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://fattymelon.github.io/"/>
-  <updated>2017-05-24T13:34:36.000Z</updated>
+  <updated>2017-05-25T02:38:32.000Z</updated>
   <id>https://fattymelon.github.io/</id>
   
   <author>
@@ -16,29 +16,32 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>测试</title>
-    <link href="https://fattymelon.github.io/2017/05/24/%E6%B5%8B%E8%AF%95/"/>
-    <id>https://fattymelon.github.io/2017/05/24/测试/</id>
+    <title>Hexo接入Gitment评论</title>
+    <link href="https://fattymelon.github.io/2017/05/24/hexo_access/"/>
+    <id>https://fattymelon.github.io/2017/05/24/hexo_access/</id>
     <published>2017-05-24T02:59:21.000Z</published>
-    <updated>2017-05-24T13:34:36.000Z</updated>
+    <updated>2017-05-25T02:38:32.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> i;</div><div class="line">	<span class="keyword">return</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+    <content type="html"><![CDATA[<p>&lt;!more&gt;</p>
+<h2 id="Gitment"><a href="#Gitment" class="headerlink" title="Gitment"></a>Gitment</h2><h3 id="1-注册-OAuth-Application"><a href="#1-注册-OAuth-Application" class="headerlink" title="1. 注册 OAuth Application"></a>1. 注册 OAuth Application</h3><p><a href="https://github.com/settings/applications/new" target="_blank" rel="external">点击此处</a>注册一个Oauth Application，其他信息可以随意，但是确保填入正确的 callback URL（一般是评论页面对应的域名，图中写的是xxxx.github.io）<br><img src="./Oauth.png" alt=""><br>注册完成后会得到一个client id和client secret</p>
+<h3 id="2-接入-Gitment"><a href="#2-接入-Gitment" class="headerlink" title="2. 接入 Gitment"></a>2. 接入 Gitment</h3><p>根据备注把内容填好，并将代码放入评论页面<br><strong>这里最重要的是repo，很多人不知道应该填什么，如果你用的是github page，那你只需要把xxxx改成你自己的name就好</strong><br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;div id=<span class="string">"container"</span>&gt;&lt;/div&gt;</div><div class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"https://imsun.github.io/gitment/style/default.css"</span>&gt;</div><div class="line">&lt;script src="https://imsun.github.io/gitment/dist/gitment.browser.js"&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line"><span class="keyword">var</span> gitment = <span class="keyword">new</span> Gitment(&#123;</div><div class="line">  <span class="attr">owner</span>: <span class="string">'xxxx'</span>, <span class="comment">//github name,必须是注册时候的名字，就是下面这一行的xxxx</span></div><div class="line">  repo: <span class="string">'xxxx.github.io'</span>, <span class="comment">//存储评论的repositories 名字</span></div><div class="line">  oauth: &#123;</div><div class="line">    <span class="attr">client_id</span>: <span class="string">'你的 client ID'</span>,</div><div class="line">    <span class="attr">client_secret</span>: <span class="string">'你的 client secret'</span>,</div><div class="line">  &#125;,</div><div class="line">&#125;)</div><div class="line">gitment.render(<span class="string">'container'</span>)</div><div class="line">&lt;<span class="regexp">/script&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="3-初始化"><a href="#3-初始化" class="headerlink" title="3. 初始化"></a>3. 初始化</h3><p>配置好以后，会在你的页面看到一个初始化按钮。<br>点击之后会在你的repo的issues页面下创建对应的issue.<br><img src="./comment.png" alt=""><br><img src="./issue.png" alt=""></p>
+<h3 id="4-测试"><a href="#4-测试" class="headerlink" title="4. 测试"></a>4. 测试</h3><p><img src="./test.png" alt="测试图片"><br>大功告成</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;测试&quot;&gt;&lt;a href=&quot;#测试&quot; class=&quot;headerlink&quot; title=&quot;测试&quot;&gt;&lt;/a&gt;测试&lt;/h3&gt;&lt;figure class=&quot;highlight c&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class
+      &lt;p&gt;&amp;lt;!more&amp;gt;&lt;/p&gt;
+&lt;h2 id=&quot;Gitment&quot;&gt;&lt;a href=&quot;#Gitment&quot; class=&quot;headerlink&quot; title=&quot;Gitment&quot;&gt;&lt;/a&gt;Gitment&lt;/h2&gt;&lt;h3 id=&quot;1-注册-OAuth-Application&quot;&gt;
     
     </summary>
     
-      <category term="python" scheme="https://fattymelon.github.io/categories/python/"/>
+      <category term="hexo" scheme="https://fattymelon.github.io/categories/hexo/"/>
     
     
-      <category term="效率" scheme="https://fattymelon.github.io/tags/%E6%95%88%E7%8E%87/"/>
+      <category term="gitment" scheme="https://fattymelon.github.io/tags/gitment/"/>
     
-      <category term="细节" scheme="https://fattymelon.github.io/tags/%E7%BB%86%E8%8A%82/"/>
-    
-      <category term="快捷方式" scheme="https://fattymelon.github.io/tags/%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/"/>
+      <category term="hexo" scheme="https://fattymelon.github.io/tags/hexo/"/>
     
   </entry>
   
@@ -47,9 +50,10 @@
     <link href="https://fattymelon.github.io/2017/05/24/hello-world/"/>
     <id>https://fattymelon.github.io/2017/05/24/hello-world/</id>
     <published>2017-05-24T02:00:14.000Z</published>
-    <updated>2017-05-24T13:34:30.000Z</updated>
+    <updated>2017-05-25T02:04:34.000Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<a id="more"></a>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
@@ -62,7 +66,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
     
     </summary>
     
