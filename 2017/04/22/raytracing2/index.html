@@ -28,7 +28,7 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20170408202111900?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20170408202302541?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20170408202608815?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-05-25T06:55:58.000Z">
+<meta property="og:updated_time" content="2017-05-25T12:34:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="smallpt详解(二)">
 <meta name="twitter:description" content="本文主要说一下自己的理解，关于smallpt的cx,cy是怎么来的，是用来做什么的？">
@@ -231,7 +231,8 @@
     
     <div class="post-content markdown" itemprop="articleBody">
         <div class="main-content-wrap">
-            <p>本文主要说一下自己的理解，<br>关于smallpt的cx,cy是怎么来的，是用来做什么的？<br><a id="more"></a></p>
+            <p>本文主要说一下自己的理解，<br>关于smallpt的cx,cy是怎么来的，是用来做什么的？</p>
+<a id="more"></a>
 <h2 id="1-透视投影的原理"><a href="#1-透视投影的原理" class="headerlink" title="1. 透视投影的原理"></a>1. 透视投影的原理</h2><p><img src="http://img.blog.csdn.net/20170408195926856?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>如果是小孔成像的话，我们应该是投影在z=-d的平面上，但是这样做涉及到负值操作，还使图像反了。如果我们将投影平面移到z = d，这样做就可以避免负值问题。（但是有个问题就是，物体在摄像机和z=d平面之间的物体，电脑就无法绘制了）</p>
 <h2 id="2-cx和cy的定义"><a href="#2-cx和cy的定义" class="headerlink" title="2. cx和cy的定义"></a>2. cx和cy的定义</h2><p><img src="http://img.blog.csdn.net/20170408180858973?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTM4MDg4MDMwNA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"><br>及计算光线d的代码</p>
 <pre><code class="c">Vec d = cx*(((sx + .5 + dx) / 2 + x) / w - .5) +
@@ -568,7 +569,7 @@ gitment.render('container')
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>本文主要是为了记录我学习smallpt的过程。第一部分是关于整个程序的大致分解。第二部分主要说一下我对main函数中cx和cy的理解。第三部分主要说明光线跟踪的每一行代码所用到的数学知识。<br></div>
+                        <div class="media-content hide-xs font-merryweather"><p>本文主要是为了记录我学习smallpt的过程。第一部分是关于整个程序的大致分解。第二部分主要说一下我对main函数中cx和cy的理解。第三部分主要说明光线跟踪的每一行代码所用到的数学知识。</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -587,7 +588,7 @@ gitment.render('container')
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>本文主要说一下自己的理解，<br>关于smallpt的cx,cy是怎么来的，是用来做什么的？<br></div>
+                        <div class="media-content hide-xs font-merryweather"><p>本文主要说一下自己的理解，<br>关于smallpt的cx,cy是怎么来的，是用来做什么的？</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -606,7 +607,7 @@ gitment.render('container')
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>本文主要对smallpt的光线跟踪函数进行详细的解释<br></div>
+                        <div class="media-content hide-xs font-merryweather"><p>本文主要对smallpt的光线跟踪函数进行详细的解释</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
