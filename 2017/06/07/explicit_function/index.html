@@ -7,22 +7,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Simon&#39; Blog">
-    <title>Category: 光线跟踪 - Simon&#39; Blog</title>
+    <title>explicit构造函数的作用 - Simon&#39; Blog</title>
     <meta name="author" content="Simon chen">
     
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="good good study, day day up. ahaha!">
+    <meta name="description" content="本文通过几个例子解释了explicit关键字在构造函数中的作用。">
+<meta name="keywords" content="构造函数">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Simon&#39; Blog">
-<meta property="og:url" content="https://fattymelon.github.io/categories/光线跟踪/index.html">
+<meta property="og:title" content="explicit构造函数的作用">
+<meta property="og:url" content="https://fattymelon.github.io/2017/06/07/explicit_function/index.html">
 <meta property="og:site_name" content="Simon&#39; Blog">
-<meta property="og:description" content="good good study, day day up. ahaha!">
+<meta property="og:description" content="本文通过几个例子解释了explicit关键字在构造函数中的作用。">
+<meta property="og:updated_time" content="2017-06-07T12:49:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Simon&#39; Blog">
-<meta name="twitter:description" content="good good study, day day up. ahaha!">
+<meta name="twitter:title" content="explicit构造函数的作用">
+<meta name="twitter:description" content="本文通过几个例子解释了explicit关键字在构造函数中的作用。">
     
     
         
@@ -56,7 +58,7 @@
         
     
 
-<header id="header" data-behavior="1">
+<header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
         <a class="header-title-link" href="/ ">Simon&#39; Blog</a>
@@ -80,7 +82,7 @@
         
     
 
-<nav id="sidebar" data-behavior="1">
+<nav id="sidebar" data-behavior="4">
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
@@ -188,151 +190,242 @@
 </nav>
 
             
-            <div id="main" data-behavior="1"
+            <div id="main" data-behavior="4"
                  class="
                         hasCoverMetaIn
                         ">
                 
-    <section class="postShorten-group main-content-wrap">
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
     
     
-    <article class="postShorten postShorten--thumbnailimg-right" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2017/04/25/raytracing3/">
-                            smallpt详解(三)
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2017-04-25T14:26:55+08:00">
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            explicit构造函数的作用
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time itemprop="datePublished" datetime="2017-06-07T19:59:21+08:00">
 	
-		    Apr 25, 2017
+		    Jun 07, 2017
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/光线跟踪/">光线跟踪</a>
+    <a class="category-link" href="/categories/C/">C++</a>
 
 
     
 </div>
 
-            </div>
-            
-                <div class="postShorten-excerpt" itemprop="articleBody">
-                    <p>本文主要对smallpt的光线跟踪函数进行详细的解释</p>
-                    
-                        <a href="/2017/04/25/raytracing3/" class="postShorten-excerpt_link link">
-                            Continue reading
-                        </a>
-                        
-                    
-                </div>
-            
-        </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-right" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
-            
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2017/04/22/raytracing2/">
-                            smallpt详解(二)
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2017-04-22T14:26:55+08:00">
-	
-		    Apr 22, 2017
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/光线跟踪/">光线跟踪</a>
-
-
     
 </div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>本文通过几个例子解释了explicit关键字在构造函数中的作用。</p>
+<a id="more"></a>
+<h3 id="1-构造函数的隐式转换"><a href="#1-构造函数的隐式转换" class="headerlink" title="1. 构造函数的隐式转换"></a>1. 构造函数的隐式转换</h3><p>C++的默认规定，如果构造函数只接受一个实参，则它实际上定义了转换为此类型的隐式转换机制。（但是只允许一步类类型转换）</p>
+<pre><code class="C++">// C++ Primer
+class Sales_data {
+    Sales_data(string s) {}
+}
 
-            </div>
-            
-                <div class="postShorten-excerpt" itemprop="articleBody">
-                    <p>本文主要说一下自己的理解，<br>关于smallpt的cx,cy是怎么来的，是用来做什么的？</p>
-                    
-                        <a href="/2017/04/22/raytracing2/" class="postShorten-excerpt_link link">
-                            Continue reading
-                        </a>
-                        
-                    
-                </div>
+void func(Sales_data a);
+
+int main() {
+    Sales_data test(&quot;999999&quot;);  // 编译通过，&quot;999999&quot;隐式转换为string，再调用构造函数
+
+    func(&quot;999999&quot;);     // 编译错误，
+                        // 1)把&quot;999999&quot;转化为string
+                        // 2)把临时string转为Sales_data
+
+    func(string(&quot;999999&quot;)); // 编译通过，这里把string隐式转换为了Sales_data
+}
+</code></pre>
+<h3 id="2-隐式转换的坑"><a href="#2-隐式转换的坑" class="headerlink" title="2. 隐式转换的坑"></a>2. 隐式转换的坑</h3><p>假设我们要实现一个复数类，然后我们定义了一个Complex类</p>
+<pre><code class="C++">#include &lt;iostream&gt;
+
+using namespace std;
+
+class Complex
+{
+private:
+    double real;
+    double imag;
+
+public:
+    // Default constructor
+    Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}
+
+    // A method to compare two Complex numbers
+    bool operator == (Complex rhs) {
+       return (real == rhs.real &amp;&amp; imag == rhs.imag)? true : false;
+    }
+};
+
+int main()
+{
+    // a Complex object
+    Complex com1(3.0, 0.0);
+
+    if (com1 == 3.0)
+       cout &lt;&lt; &quot;Same&quot;;
+    else
+       cout &lt;&lt; &quot;Not Same&quot;;
+     return 0;
+}
+
+// 结果输出Same
+</code></pre>
+<p>很明显，com1 == 3.0此处发生了一次隐式转换，然后3.0转换为了Complex(3.0, 0.0)所以最后输出了Same。</p>
+<p>###3. explicit作用<br>如果我们想避开这个坑，那就用explicit来抑制构造函数的隐式转换。</p>
+<pre><code class="c++">class Complex
+{
+private:
+    double real;
+    double imag;
+
+public:
+    // Default constructor
+    explicit Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}
+
+    // A method to compare two Complex numbers
+    bool operator== (Complex rhs) {
+       return (real == rhs.real &amp;&amp; imag == rhs.imag)? true : false;
+    }
+};
+</code></pre>
+<p>此时，结果输出的是Not Same。</p>
+<h3 id="4-其他例子"><a href="#4-其他例子" class="headerlink" title="4.其他例子"></a>4.其他例子</h3><pre><code class="c++">class String {
+    String(int n) {} //本意是预先分配n个字节给字符串
+    String(const char* p) {} // 用C风格的字符串p作为初始化值
+}
+</code></pre>
+<p>下面两种写法比较正常：<br>String s2(10);      //OK 分配10个字节的空字符串<br>String s3 = String(10);     //OK 分配10个字节的空字符串</p>
+<p>下面两种写法就比较疑惑了：<br>String s4 = 10;  //编译通过，也是分配10个字节的空字符串<br>String s5 = ‘a’;  //编译通过，分配int(‘a’)个字节的空字符串</p>
+<p>s4 和s5 分别把一个int型和char型，隐式转换成了分配若干字节的空字符串，容易令人误解。<br>为了避免这种错误的发生，我们可以声明显示的转换，使用explicit 关键字：</p>
+<pre><code class="c++">class String {
+    explicit String(int n) {} //预先分配n个字节给字符串
+    String(const char* p) {} // 用C风格的字符串p作为初始化值
+}
+</code></pre>
+<p>加上explicit，就抑制了String(int n)的隐式转换，</p>
+<p>下面两种写法仍然正确：<br>String s2 (10);   //OK 分配10个字节的空字符串</p>
+<p>下面两种写法就不允许了：<br>String s4 = 10; //编译不通过，不允许隐式的转换<br>String s5 = ‘a’; //编译不通过，不允许隐式的转换</p>
+<p><strong>所以，explicit可以有效地防止构造函数的隐式转换带来的错误和误解</strong></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
+<li>C++ Primer</li>
+<li><a href="http://www.geeksforgeeks.org/g-fact-93/" target="_blank" rel="external">http://www.geeksforgeeks.org/g-fact-93/</a></li>
+<li><a href="http://www.cnblogs.com/cutepig/archive/2009/01/14/1375917.html" target="_blank" rel="external">http://www.cnblogs.com/cutepig/archive/2009/01/14/1375917.html</a></li>
+</ol>
+
             
         </div>
-        
-    </article>
-    
-    
-    <article class="postShorten postShorten--thumbnailimg-right" itemscope itemType="http://schema.org/BlogPosting">
-        <div class="postShorten-wrap">
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        <div class="post-footer-tags">
             
-            <div class="postShorten-header">
-                <h1 class="postShorten-title" itemprop="headline">
-                    
-                        <a class="link-unstyled" href="/2017/04/20/raytracing1/">
-                            smallpt详解(一)
-                        </a>
-                    
-                </h1>
-                <div class="postShorten-meta">
-    <time itemprop="datePublished" datetime="2017-04-20T14:26:55+08:00">
-	
-		    Apr 20, 2017
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/光线跟踪/">光线跟踪</a>
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/构造函数/">构造函数</a>
 
 
-    
-</div>
-
-            </div>
             
-                <div class="postShorten-excerpt" itemprop="articleBody">
-                    <p>本文主要是为了记录我学习smallpt的过程。第一部分是关于整个程序的大致分解。第二部分主要说一下我对main函数中cx和cy的理解。第三部分主要说明光线跟踪的每一行代码所用到的数学知识。</p>
-                    
-                        <a href="/2017/04/20/raytracing1/" class="postShorten-excerpt_link link">
-                            Continue reading
-                        </a>
-                        
-                    
-                </div>
-            
+            </br>
+            <span id="busuanzi_container_page_pv" class="text-color-light text-small">
+            Viewd <span id="busuanzi_value_page_pv"></span> times
+            </span>
         </div>
         
-    </article>
-    
-    <div class="pagination-bar">
-    <ul class="pagination">
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/05/24/hexo_access/" data-tooltip="Hexo接入Gitment评论">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/06/07/explicit_function/">
+                    <i class="fa fa-facebook-official"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/06/07/explicit_function/">
+                    <i class="fa fa-twitter"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/06/07/explicit_function/">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </li>
         
         
-        <li class="pagination-number">page 1 of 1</li>
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
     </ul>
 </div>
 
-</section>
+
+        
+        
+            
+            
+                <div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: 'FattyMelon',
+  repo: 'FattyMelon.github.io',
+  oauth: {
+    client_id: 'ae5e1fbec7bfdd022624',
+    client_secret: '20d776f046a5cfca506202f4f5116d7d1c041942',
+  },
+})
+gitment.render('container')
+</script>
+            
+        
+    </div>
+</article>
 
 
 
@@ -356,6 +449,104 @@
 	
 </footer>
             </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2017/05/24/hexo_access/" data-tooltip="Hexo接入Gitment评论">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/06/07/explicit_function/">
+                    <i class="fa fa-facebook-official"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/06/07/explicit_function/">
+                    <i class="fa fa-twitter"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/06/07/explicit_function/">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </li>
+        
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#">
+            
+                <i class="fa fa-list"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-close"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://fattymelon.github.io/2017/06/07/explicit_function/">
+                    <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://fattymelon.github.io/2017/06/07/explicit_function/">
+                    <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://fattymelon.github.io/2017/06/07/explicit_function/">
+                    <i class="fa fa-google-plus"></i><span>Share on Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
             
         </div>
         
@@ -547,6 +738,8 @@
         <!--SCRIPTS-->
 <script src="/assets/js/script-ivwiy10zeb8fifc4swnhkwneuk64y53w2scmdmtp8thi9cqfxh31aowtroaz.min.js"></script>
 <!--SCRIPTS END-->
+
+    
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment-with-locales.min.js"></script>
