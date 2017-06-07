@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://fattymelon.github.io/"/>
-  <updated>2017-06-07T12:49:14.000Z</updated>
+  <updated>2017-06-07T12:53:33.000Z</updated>
   <id>https://fattymelon.github.io/</id>
   
   <author>
@@ -17,10 +17,10 @@
   
   <entry>
     <title>explicit构造函数的作用</title>
-    <link href="https://fattymelon.github.io/2017/06/07/explicit_function/"/>
-    <id>https://fattymelon.github.io/2017/06/07/explicit_function/</id>
-    <published>2017-06-07T11:59:21.000Z</published>
-    <updated>2017-06-07T12:49:14.000Z</updated>
+    <link href="https://fattymelon.github.io/2017/06/06/explicit_function/"/>
+    <id>https://fattymelon.github.io/2017/06/06/explicit_function/</id>
+    <published>2017-06-06T11:02:21.000Z</published>
+    <updated>2017-06-07T12:53:33.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文通过几个例子解释了explicit关键字在构造函数中的作用。</p>
 <a id="more"></a>
@@ -78,7 +78,7 @@ int main()
 // 结果输出Same
 </code></pre>
 <p>很明显，com1 == 3.0此处发生了一次隐式转换，然后3.0转换为了Complex(3.0, 0.0)所以最后输出了Same。</p>
-<p>###3. explicit作用<br>如果我们想避开这个坑，那就用explicit来抑制构造函数的隐式转换。</p>
+<h3 id="3-explicit作用"><a href="#3-explicit作用" class="headerlink" title="3. explicit作用"></a>3. explicit作用</h3><p>如果我们想避开这个坑，那就用explicit来抑制构造函数的隐式转换。</p>
 <pre><code class="c++">class Complex
 {
 private:
