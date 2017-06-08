@@ -2681,7 +2681,7 @@ body {
     padding: 0;
     background: #fff;
     font-size: 1.6rem;
-    line-height: 1.9em;
+    line-height: 1.7em;
     letter-spacing: .01em;
     -webkit-font-smoothing: subpixel-antialiased;
     font-smoothing: subpixel-antialiased
@@ -2702,11 +2702,11 @@ code, pre > code {
 }
 
 h1, h2, h3 {
-    margin: 1em 0
+    margin: 1em 0 0.7em 0
 }
 
 h4, h5, h6 {
-    margin: 1em 0 .5em
+    margin: 1em 0 .7em;
 }
 
 h1 {
@@ -2797,7 +2797,6 @@ pre > code {
 
 #about, #bottom-bar {
     display: none;
-    position: fixed
 }
 
 code {
@@ -5007,7 +5006,7 @@ a.fancybox {
 
 .main-content-wrap {
     display: block;
-    max-width: 750px;
+    max-width: 950px;
     margin: 0 auto;
     padding-right: 20px;
     padding-left: 20px
@@ -5015,45 +5014,45 @@ a.fancybox {
 
 @media only screen and (min-width:1024px) {
     .markdown h1 {
-        font-size: 3rem
-    }
-
-    .markdown h2 {
         font-size: 2.7rem
     }
 
-    .markdown h3 {
+    .markdown h2 {
         font-size: 2.4rem
     }
 
-    .markdown h4 {
+    .markdown h3 {
         font-size: 2.1rem
     }
 
-    .markdown h5 {
+    .markdown h4 {
         font-size: 1.9rem
     }
 
-    .markdown h6 {
+    .markdown h5 {
         font-size: 1.7rem
+    }
+
+    .markdown h6 {
+        font-size: 1.6rem
     }
 }
 
 @media only screen and (max-width:767px) {
     .markdown h1 {
-        font-size: 2.65rem
+        font-size: 2.55rem
     }
 
     .markdown h2 {
-        font-size: 2.35rem
+        font-size: 2.25rem
     }
 
     .markdown h3 {
-        font-size: 2.05rem
+        font-size: 1.85rem
     }
 
     .markdown h4 {
-        font-size: 1.75rem
+        font-size: 1.65rem
     }
 
     .markdown h5 {
@@ -5067,19 +5066,19 @@ a.fancybox {
 
 @media only screen and (min-width:768px) and (max-width:1023px) {
     .markdown h1 {
-        font-size: 2.8rem
+        font-size: 2.65rem
     }
 
     .markdown h2 {
-        font-size: 2.5rem
+        font-size: 2.35rem
     }
 
     .markdown h3 {
-        font-size: 2.2rem
+        font-size: 2.05rem
     }
 
     .markdown h4 {
-        font-size: 1.9rem
+        font-size: 1.85rem
     }
 
     .markdown h5 {
@@ -5252,7 +5251,7 @@ a.fancybox {
 }
 
 .post .post-content :not(blockquote):not(.alert) > p {
-    margin: 1.5em 0 0
+    margin: 1.1em 0 0
 }
 
 .post .post-footer {
@@ -5279,8 +5278,8 @@ a.fancybox {
 
 @media only screen and (min-width:768px) {
     .post-content {
-        font-size: 1.7rem
-    }
+    font-size: 1.5rem;
+}
 }
 
 .post-actions-wrap {
@@ -6207,6 +6206,7 @@ pre > code {
 }
 
 code {
+    background-color: none;
 }
 
 .codeblock--tabbed figcaption .tab.active {
@@ -6752,4 +6752,5 @@ figure.highlight.yml .type {
 .codeblock.yml .number, figure.highlight.yml .number {
     color: #0086b3
 }
+
 
