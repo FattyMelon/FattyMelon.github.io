@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://fattymelon.github.io/"/>
-  <updated>2017-06-07T12:59:40.000Z</updated>
+  <updated>2017-06-08T05:38:34.000Z</updated>
   <id>https://fattymelon.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://fattymelon.github.io/2017/06/07/explicit_function/"/>
     <id>https://fattymelon.github.io/2017/06/07/explicit_function/</id>
     <published>2017-06-07T11:02:21.000Z</published>
-    <updated>2017-06-07T12:59:40.000Z</updated>
+    <updated>2017-06-08T05:38:34.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文通过几个例子解释了explicit关键字在构造函数中的作用。</p>
 <a id="more"></a>
@@ -94,8 +94,10 @@ public:
        return (real == rhs.real &amp;&amp; imag == rhs.imag)? true : false;
     }
 };
+
+// 此时再运行com1 == 3.0，就会有报错了 
+// error: invalid operands to binary expression (&#39;Complex&#39; and &#39;double&#39;)
 </code></pre>
-<p>此时，结果输出的是Not Same。</p>
 <h3 id="4-其他例子"><a href="#4-其他例子" class="headerlink" title="4.其他例子"></a>4.其他例子</h3><pre><code class="c++">class String {
     String(int n) {} //本意是预先分配n个字节给字符串
     String(const char* p) {} // 用C风格的字符串p作为初始化值
